@@ -61,6 +61,25 @@
             outline: none;
             border-bottom: #d30000 2px solid;
         }
+
+        button{
+            position: absolute;
+            height: 34px;
+            width: 100px;
+            right: 0px;
+            top: 0px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background-color: #282930;
+            border: none;
+            color:#b5b5b5;
+            cursor: pointer;
+            transition: color 0.3s ease;
+
+            &:hover{
+                color: white;
+            }
+        }
     }
 }
 

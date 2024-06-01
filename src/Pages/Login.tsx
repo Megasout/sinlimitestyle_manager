@@ -1,6 +1,6 @@
 import { Form } from "react-router-dom"
 import "../Styles/login.scss"
-import React, { ChangeEvent, useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 
 function Login() {
     return (
@@ -10,7 +10,7 @@ function Login() {
                 <Form>
                     <div className="info">
                         <InputLogin text="Dirección de email" type="email" />
-                        <InputLogin text="Contraseña" type="password" />
+                        <InputLogin text="Contraseña" type="password" showButton />
                     </div>
                     <input type="submit" value={"ACCEDER"} />
                 </Form>
@@ -23,17 +23,19 @@ export default Login
 
 type InputLoginType = {
     text: string,
-    type: React.HTMLInputTypeAttribute
+    type: React.HTMLInputTypeAttribute,
+    showButton?: boolean
 }
 
 function InputLogin(props: InputLoginType) {
-    const { text, type } = props
-    // const inputRef = useRef<HTMLInputElement>(null)
+    const { text, type, showButton } = props
+    const inputRef = useRef<HTMLInputElement>(null)
     const [value, setValue] = useState<string | undefined>()
     const [labelPlaceholder, setLabel] = useState(true)
+    const [showText, setShowText] = useState(false)
 
     useEffect(() => {
-        if(value != '')
+        if (value != '')
             setLabel(false)
     }, [value])
 
@@ -42,7 +44,6 @@ function InputLogin(props: InputLoginType) {
     }
 
     const handleOnBlur = () => {
-        // if (inputRef.current?.value === '')
         if (value == '')
             setLabel(true)
     }
@@ -51,10 +52,23 @@ function InputLogin(props: InputLoginType) {
         setValue(event.target.value)
     }
 
+    const handleShowButton = () => {
+        setShowText(!showText)
+
+        if(inputRef.current)
+            inputRef.current.focus()
+    }
+
     return (
         <div style={{ position: "relative" }}>
             <label className={`${!labelPlaceholder ? 'placeholder' : ''}`}>{text}</label>
-            <input onBlur={handleOnBlur} onFocus={handleOnFocus} type={type} value={value} onChange={handleOnChange} />
+            <input
+                ref={inputRef}
+                onBlur={handleOnBlur}
+                onFocus={handleOnFocus}
+                type={showButton && showText ? "text" : type}
+                value={value} onChange={handleOnChange} />
+            {showButton && <button onClick={handleShowButton}>{showText ? "OCULTAR" : "MOSTRAR"}</button>}
         </div>
     )
 }
