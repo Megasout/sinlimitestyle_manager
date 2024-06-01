@@ -9,13 +9,11 @@ $TittleFont: "Poppins", sans-serif;
   font-family: "Inter", sans-serif;
   font-weight: 400;
 
+  background-color: #0e0e0e;
+  color: white;
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  margin: 0;
-  display: flex;
 }
