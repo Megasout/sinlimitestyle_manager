@@ -4,10 +4,10 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    margin-top: 12rem;
 }
 
 .login .block {
+    margin-top: 12rem;
     align-self: center;
     display: flex;
     flex-direction: column;
@@ -94,5 +94,26 @@
 
     &:hover{
         background-color: #bf3d3d;
+    }
+}
+
+.login .error{
+    position: absolute;
+    width: 100%;
+    background-color: #bf2525;
+    animation: entry 0.8s ease;
+
+    h2{
+        text-align: center;
+        font-weight: 500;
+    }
+
+    @keyframes entry{
+        0%{
+            transform: translate(0, -100px);
+        }
+        100%{
+            transform: translate(0, 0);
+        }
     }
 }

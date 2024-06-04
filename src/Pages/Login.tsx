@@ -1,16 +1,51 @@
-import { Form } from "react-router-dom"
+import { Form, redirect, useActionData, useNavigate } from "react-router-dom"
 import "../Styles/login.scss"
-import React, { useEffect, useRef, useState } from "react"
+import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react"
+import { isTokenValid } from "../Models/token"
+import { postLogin } from "../Models/post"
+
+export async function loader() {
+    const token = await isTokenValid()
+
+    if (token.value) {
+        return redirect('/Home')
+    }
+
+    return token
+}
+
+export async function action({ request }: any): Promise<any> {
+    const formData = await request.formData() as FormData
+    const data = Object.fromEntries(formData)
+
+    const result = await postLogin(data)
+
+    console.log(result)
+
+    if ('token' in result) {
+        localStorage.setItem('token', JSON.stringify(result.token))
+        return redirect('/Home')
+    }
+
+    return result
+}
 
 function Login() {
+    const result = useActionData() as any
+    console.log(result)
+
     return (
         <div className="login">
+            {result != undefined &&
+                <div className="error">
+                    <h2>{result.message}</h2>
+                </div>}
             <div className="block">
                 <h1>Acceder</h1>
-                <Form>
+                <Form method="post">
                     <div className="info">
-                        <InputLogin text="Dirección de email" type="email" />
-                        <InputLogin text="Contraseña" type="password" showButton />
+                        <InputLogin name="email" text="Dirección de email" type="email" />
+                        <InputLogin name="password" text="Contraseña" type="password" showButton />
                     </div>
                     <input type="submit" value={"ACCEDER"} />
                 </Form>
@@ -22,20 +57,33 @@ function Login() {
 export default Login
 
 type InputLoginType = {
+    name: string,
     text: string,
     type: React.HTMLInputTypeAttribute,
     showButton?: boolean
 }
 
 function InputLogin(props: InputLoginType) {
-    const { text, type, showButton } = props
+    const { name, text, type, showButton } = props
     const inputRef = useRef<HTMLInputElement>(null)
-    const [value, setValue] = useState<string | undefined>()
+    const [value, setValue] = useState<string>('')
+    const [canAnimated, setCanAnimated] = useState(false)
     const [labelPlaceholder, setLabel] = useState(true)
     const [showText, setShowText] = useState(false)
 
     useEffect(() => {
-        if (value != '')
+        setValue(' ')
+
+        const timer = setTimeout(() => {
+            setValue('')
+            setCanAnimated(true)
+        }, 100);
+
+        return () => clearTimeout(timer)
+    }, [])
+
+    useEffect(() => {
+        if (value != '' && canAnimated)
             setLabel(false)
     }, [value])
 
@@ -44,18 +92,18 @@ function InputLogin(props: InputLoginType) {
     }
 
     const handleOnBlur = () => {
-        if (value == '')
+        if (inputRef.current?.value == '')
             setLabel(true)
     }
 
-    const handleOnChange = (event: any) => {
-        setValue(event.target.value)
+    const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setValue(e.target.value)
     }
 
     const handleShowButton = () => {
         setShowText(!showText)
 
-        if(inputRef.current)
+        if (inputRef.current)
             inputRef.current.focus()
     }
 
@@ -66,9 +114,10 @@ function InputLogin(props: InputLoginType) {
                 ref={inputRef}
                 onBlur={handleOnBlur}
                 onFocus={handleOnFocus}
+                name={name}
                 type={showButton && showText ? "text" : type}
                 value={value} onChange={handleOnChange} />
-            {showButton && <button onClick={handleShowButton}>{showText ? "OCULTAR" : "MOSTRAR"}</button>}
+            {showButton && <button type="button" onClick={handleShowButton}>{showText ? "OCULTAR" : "MOSTRAR"}</button>}
         </div>
     )
 }
