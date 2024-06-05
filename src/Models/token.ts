@@ -9,8 +9,6 @@ export async function isTokenValid() {
         return { value: false }
     }
 
-    console.log(token)
-
     const response = await fetch(`${import.meta.env.VITE_URL}/token/manager`, {
         method: 'GET',
         headers: {

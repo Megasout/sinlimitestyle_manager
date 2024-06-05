@@ -1,0 +1,70 @@
+@import "index.scss";
+
+.layout{
+    position: relative;
+    display: grid;
+    grid-template-columns: 500px 1fr;
+}
+
+.layout .side_menu{
+    position: sticky;
+    top: 0px;
+    bottom: 0px;
+    height: 100vh;
+    background-color: #256dbf;
+}
+
+.layout .navigation{
+    display: flex;
+    flex-direction: column;
+
+    nav{
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+
+        .side_menu_button{
+            display: flex;
+            // justify-content: space-between;
+            padding: 0.5rem;
+            padding-right: 1rem;
+            padding-left: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+
+            &:hover{
+                background-color: #2c82e4;
+
+                a, i{
+                    transition: color 0.2s ease;
+                    color: #dedddd;
+                }
+            }
+        }
+
+        i{
+            font-size: 33px;
+            width: 43px;
+            height: 33px;
+            text-align: center;
+        }
+
+        a{
+            padding-left: 2rem;
+            text-decoration: none;
+            color: white;
+            font-size: 1.8rem;
+        }
+    }
+}
+
+.layout .navigation h1{
+    padding: 1rem;
+    font-weight: 500;
+    font-family: $TittleFont;
+}
+
+.layout .page{
+    height: 100%;
+    width: 100%;
+}
