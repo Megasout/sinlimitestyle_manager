@@ -7,7 +7,7 @@ export async function loader() {
     const token = await isTokenValid()
 
     if (!token.value) {
-        return redirect('/')
+        return redirect('/login')
     }
 
     return token

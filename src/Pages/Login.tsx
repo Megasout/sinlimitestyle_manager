@@ -8,7 +8,7 @@ export async function loader() {
     const token = await isTokenValid()
 
     if (token.value) {
-        return redirect('/Home')
+        return redirect('/')
     }
 
     return token
@@ -24,7 +24,7 @@ export async function action({ request }: any): Promise<any> {
 
     if ('token' in result) {
         localStorage.setItem('token', JSON.stringify(result.token))
-        return redirect('/Home')
+        return redirect('/')
     }
 
     return result
