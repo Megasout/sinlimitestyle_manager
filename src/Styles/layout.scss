@@ -3,7 +3,11 @@
 .layout{
     position: relative;
     display: grid;
-    grid-template-columns: 400px 1fr;
+    grid-template-columns: 300px 1fr;
+
+    @media (min-width: 1300px) {
+        grid-template-columns: 400px 1fr;
+    }
 }
 
 .layout .side_menu{
@@ -47,13 +51,23 @@
             width: 43px;
             height: 33px;
             text-align: center;
+            font-size: 1.6rem;
+
+            @media (min-width: 1300px) {
+                font-size: 1.8rem;
+            }
         }
 
         a{
-            padding-left: 2rem;
+            padding-left: 1rem;
             text-decoration: none;
             color: white;
-            font-size: 1.8rem;
+            font-size: 1.4rem;
+            
+            @media (min-width: 1300px) {
+                padding-left: 2rem;
+                font-size: 1.8rem;
+            }
         }
     }
 
