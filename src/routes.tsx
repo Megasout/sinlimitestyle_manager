@@ -8,7 +8,8 @@ import Usuarios from "./Pages/Usuarios/Usuarios";
 import Pagina from "./Pages/Pagina/Pagina";
 import LayoutProductos from "./Components/LayoutProductos";
 import LayoutPage from "./Components/LayoutPage";
-import Colores from "./Pages/Productos/Colores";
+import Colores, {loader as coloresLoader} from "./Pages/Productos/Colores";
+import {action as deleteColor} from "./Components/ColorElement";
 
 const router = createBrowserRouter([
     {
@@ -47,7 +48,12 @@ const router = createBrowserRouter([
             },
             {
                 path:'Colores',
-                element: <Colores/>
+                element: <Colores/>,
+                loader: coloresLoader
+            },
+            {
+                path:'Colores/:ID/delete',
+                action: deleteColor
             }
         ]
     },

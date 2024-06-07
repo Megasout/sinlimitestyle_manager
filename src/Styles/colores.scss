@@ -1,0 +1,156 @@
+@import "index.scss";
+
+.colores {
+    display: grid;
+    // margin: 1rem;
+    grid-template-columns: 1fr auto;
+
+    h1 {
+        font-family: $TittleFont;
+        font-weight: 500;
+        font-size: 3rem;
+    }
+
+    .add {
+        background-color: whitesmoke;
+        height: 100vh;
+        width: 500px;
+        color: black;
+    }
+
+    .add form {
+        margin-top: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        h2 {
+            margin-left: 1.5rem;
+            margin-right: 1.5rem;
+        }
+
+        label {
+            margin-left: 1.5rem;
+            margin-right: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        input[type="text"] {
+            font-size: 1.3rem;
+            background-color: white;
+            color: black;
+            border: 1px solid black;
+        }
+
+        .name {
+            margin-left: 1.5rem;
+            margin-right: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .color_select {
+            display: grid;
+            background-color: #666767;
+            padding: 1rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            justify-content: start;
+
+            .color_block {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+
+                .block {
+                    background-color: red;
+                    width: 218px;
+                    height: 25px;
+                    border-radius: 25px;
+                    box-shadow: 5px 5px 10px #1a1a1a
+                }
+
+                input[type="text"] {
+                    width: 212px;
+                }
+            }
+        }
+
+        .color {
+            border-radius: 10px;
+            justify-self: end;
+        }
+
+
+
+        input[type="submit"] {
+            margin-left: 1.5rem;
+            margin-right: 1.5rem;
+            font-size: 1.3rem;
+            background-color: #bf2525;
+            border: none;
+            height: 2rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+                background-color: #bf3d3d;
+            }
+        }
+    }
+
+    .error{
+        background-color: #bf2525;
+        text-align: center;
+        color: white;
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
+
+    .get {
+        margin-top: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .get table {
+        background-color: whitesmoke;
+        color: black;
+        padding: 1rem;
+        width: auto;
+        margin-right: 1rem;
+        margin-left: 1rem;
+
+        p {
+            text-align: center;
+        }
+
+        .color {
+            display: flex;
+            justify-content: center;
+
+            div {
+                background-color: #de0215;
+                width: 100px;
+                height: 25px;
+                border-radius: 25px;
+                box-shadow: 5px 5px 10px #898989
+            }
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+
+            button {
+                width: 90%;
+                background-color: #8b2222;
+                padding: 0.3rem;
+                border: none;
+                text-decoration: none;
+                color: white;
+                cursor: pointer;
+            }
+        }
+    }
+}

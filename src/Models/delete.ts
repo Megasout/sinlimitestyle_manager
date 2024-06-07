@@ -1,15 +1,13 @@
 import { redirect } from "react-router-dom"
 
-export async function postToTable(data: any, url: string) {
+export default async function deleteFromTable(url: string) {
     const token = JSON.parse(localStorage.getItem('token') as string)
 
     const response = await fetch(import.meta.env.VITE_URL + url, {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
-            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(data)
+        }
     })
 
     const result = await response.json()
@@ -26,16 +24,4 @@ export async function postToTable(data: any, url: string) {
     }
 
     return result
-}
-
-export async function postLogin(data: any) {
-    const response = await fetch(`${import.meta.env.VITE_URL}/login/manager`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-
-    return await response.json()
 }
