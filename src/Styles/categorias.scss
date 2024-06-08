@@ -1,11 +1,11 @@
 @import "./index.scss";
 
 .categorias {
-    .error{
+    .error {
         display: fixed;
         background-color: #bf2525;
 
-        h2{
+        h2 {
             padding: 0.8rem;
             margin: 0;
             text-align: center;
@@ -26,27 +26,37 @@
         margin-right: 1rem;
         margin-left: 1rem;
 
-        .title{
+        .title {
             background-color: #256dbf;
 
-            p{
+            p {
                 font-weight: 400;
                 font-size: 1.2rem;
             }
         }
 
-        .add{
-            width: 90%;
+        .blue {
             background-color: #256dbf;
             cursor: pointer;
             transition: background-color 0.3s ease;
 
-            &:hover{
+            &:hover {
                 background-color: #2c82e4;
             }
         }
 
-        input[type="text"]{
+        .add {
+            width: 90%;
+        }
+
+        .edit{
+            height: 50.39px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input[type="text"] {
             width: 90%;
             font-size: 1.3rem;
             background-color: white;
@@ -54,7 +64,7 @@
             border: 1px solid black;
         }
 
-        select{
+        select {
             width: 90%;
             font-size: 1.3rem;
             background-color: white;
@@ -62,7 +72,7 @@
             border: 1px solid black;
         }
 
-        .line{
+        .line {
             width: 100%;
             margin-top: 0.5rem;
             margin-bottom: 0.5rem;
@@ -70,7 +80,7 @@
             background-color: black;
         }
 
-        .item:nth-child(even){
+        .item:nth-child(even) {
             background-color: #9393a3;
         }
 
@@ -91,7 +101,7 @@
             }
         }
 
-        th{
+        th {
             width: 33%;
         }
 
@@ -109,6 +119,11 @@
                 text-decoration: none;
                 color: white;
                 cursor: pointer;
+                transition: background-color 0.3s ease;
+
+                &:hover{
+                    background-color: #b22c2c;
+                }
             }
         }
     }

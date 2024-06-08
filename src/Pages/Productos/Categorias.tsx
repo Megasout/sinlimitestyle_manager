@@ -20,6 +20,7 @@ function Categorias() {
     const [loader, setLoader] = useState(false)
     const [filter, setFilter] = useState('')
     const [error, setError] = useState(false)
+    const [isEditing, setIsEditing] = useState(false)
 
     useEffect(() => {
         setError(false)
@@ -66,7 +67,9 @@ function Categorias() {
                                 nombre={categoria.nombre}
                                 tipo={categoria.tipo}
                                 setError={setError}
-                                setLoader={setLoader} />)}
+                                setLoader={setLoader}
+                                isEditing={isEditing}
+                                setIsEditing={setIsEditing} />)}
                     </tbody>
                 </table>
             </div>
@@ -154,7 +157,7 @@ function AddCategoria(props: AddCategoriaType) {
             </td>
             <td className="actions">
                 <form method="POST" onSubmit={handleOnSubmit}>
-                    <button className="add" type="submit">Agregar</button>
+                    <button className="add blue" type="submit">Agregar</button>
                 </form>
             </td>
         </tr>

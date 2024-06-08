@@ -6,6 +6,7 @@ import Colores, { loader as coloresLoader } from "./Colores";
 import { action as deleteColor } from "../../Components/ColorElement";
 import Talles from "./Talles";
 import Categorias, {loader as categoriasLoader} from "./Categorias";
+import {action as deleteCategoria} from "../../Components/CategoriaElement"
 
 const productosRoute: RouteObject =
 {
@@ -34,6 +35,10 @@ const productosRoute: RouteObject =
             path: 'Categorias',
             element: <Categorias/>,
             loader: categoriasLoader
+        },
+        {
+            path: 'Categorias/:ID/delete',
+            action: deleteCategoria
         }
     ]
 }
