@@ -10,6 +10,7 @@ import LayoutProductos from "./Components/LayoutProductos";
 import LayoutPage from "./Components/LayoutPage";
 import Colores, {loader as coloresLoader} from "./Pages/Productos/Colores";
 import {action as deleteColor} from "./Components/ColorElement";
+import productosRoute from "./Pages/Productos";
 
 const router = createBrowserRouter([
     {
@@ -37,26 +38,7 @@ const router = createBrowserRouter([
             }
         ]
     },
-    {
-        path: '/Productos',
-        element: <LayoutProductos />,
-        loader: layoutLoader,
-        children: [
-            {
-                index: true,
-                element: <Productos />
-            },
-            {
-                path:'Colores',
-                element: <Colores/>,
-                loader: coloresLoader
-            },
-            {
-                path:'Colores/:ID/delete',
-                action: deleteColor
-            }
-        ]
-    },
+    productosRoute,
     {
         path: '/Pagina',
         element: <LayoutPage />,

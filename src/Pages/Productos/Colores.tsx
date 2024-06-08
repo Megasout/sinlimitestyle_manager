@@ -75,6 +75,7 @@ function Colores() {
                         {filterbyName(colores, filter).map((color) =>
                         (
                             <ColorElement
+                                key={color.id}
                                 id={color.id}
                                 hex={color.hex}
                                 nombre={color.nombre}
