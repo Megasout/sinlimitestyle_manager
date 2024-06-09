@@ -6,7 +6,7 @@ import { postToTable } from "../../Models/post";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import getFromTable from "../../Models/get";
 import { filterbyName } from "../../Helpers";
-import ColorElement from "../../Components/ColorElement";
+import ColorElement from "../../Components/Productos/ColorElement";
 import Loader from "../../Components/Loader";
 
 export async function loader() {

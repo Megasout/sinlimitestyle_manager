@@ -1,5 +1,5 @@
 import { Form, redirect } from "react-router-dom"
-import deleteFromTable from "../Models/delete"
+import deleteFromTable from "../../Models/delete"
 
 export async function action({ params }: any) {
     const id = params.ID

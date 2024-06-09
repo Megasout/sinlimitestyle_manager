@@ -3,10 +3,12 @@ import Productos from "./Productos";
 import { loader as layoutLoader } from "../../Components/Layout";
 import LayoutProductos from "../../Components/LayoutProductos";
 import Colores, { loader as coloresLoader } from "./Colores";
-import { action as deleteColor } from "../../Components/ColorElement";
-import Talles from "./Talles";
-import Categorias, {loader as categoriasLoader} from "./Categorias";
-import {action as deleteCategoria} from "../../Components/CategoriaElement"
+import { action as deleteColor } from "../../Components/Productos/ColorElement";
+import Talles, { loader as tallesLoader } from "./Talles";
+import Categorias, { loader as categoriasLoader } from "./Categorias";
+import { action as deleteCategoria } from "../../Components/Productos/CategoriaElement"
+import TallesEdit, {loader as tallesByCategoriaLoader} from "./TallesEdit";
+import {action as deleteTalle} from "../../Components/Productos/TalleEditElement"
 
 const productosRoute: RouteObject =
 {
@@ -29,11 +31,21 @@ const productosRoute: RouteObject =
         },
         {
             path: 'Talles',
-            element: <Talles/>
+            element: <Talles />,
+            loader: tallesLoader,
+        },
+        {
+            path: 'Talles/:ID/edit',
+            element: <TallesEdit />,
+            loader: tallesByCategoriaLoader
+        },
+        {
+            path: 'Talles/:IDCategoria/:ID/delete',
+            action: deleteTalle
         },
         {
             path: 'Categorias',
-            element: <Categorias/>,
+            element: <Categorias />,
             loader: categoriasLoader
         },
         {

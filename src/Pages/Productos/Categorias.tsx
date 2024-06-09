@@ -5,7 +5,7 @@ import "../../Styles/categorias.scss"
 import { useLoaderData, useNavigate } from "react-router-dom"
 import { postToTable } from "../../Models/post"
 import getFromTable from "../../Models/get"
-import CategoriaElement from "../../Components/CategoriaElement"
+import CategoriaElement from "../../Components/Productos/CategoriaElement"
 import { filterbyName } from "../../Helpers"
 
 export async function loader() {

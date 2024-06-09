@@ -1,6 +1,23 @@
 @import "./index.scss";
 
 .categorias {
+    .heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-right: 1rem;
+        padding-left: 1rem;
+        margin-bottom: 1rem;
+        background-color: #141519;
+
+        h1 {
+            margin-bottom: 0.5rem;
+            font-family: $TittleFont;
+            font-weight: 500;
+            font-size: 3rem;
+        }
+    }
+
     .error {
         display: fixed;
         background-color: #bf2525;
@@ -49,7 +66,7 @@
             width: 90%;
         }
 
-        .edit{
+        .edit {
             height: 50.39px;
             display: flex;
             align-items: center;
@@ -121,7 +138,7 @@
                 cursor: pointer;
                 transition: background-color 0.3s ease;
 
-                &:hover{
+                &:hover {
                     background-color: #b22c2c;
                 }
             }

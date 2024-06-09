@@ -9,7 +9,7 @@ import Pagina from "./Pages/Pagina/Pagina";
 import LayoutProductos from "./Components/LayoutProductos";
 import LayoutPage from "./Components/LayoutPage";
 import Colores, {loader as coloresLoader} from "./Pages/Productos/Colores";
-import {action as deleteColor} from "./Components/ColorElement";
+import {action as deleteColor} from "./Components/Productos/ColorElement";
 import productosRoute from "./Pages/Productos";
 
 const router = createBrowserRouter([

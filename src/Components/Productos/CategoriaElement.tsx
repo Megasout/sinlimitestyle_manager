@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react"
-import deleteFromTable from "../Models/delete"
+import deleteFromTable from "../../Models/delete"
 import { Form, redirect, useNavigate } from "react-router-dom"
-import { putToTable } from "../Models/put"
+import { putToTable } from "../../Models/put"
 
 export async function action({ params }: any) {
     const id = params.ID
