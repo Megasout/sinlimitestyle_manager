@@ -1,4 +1,9 @@
+import { useState } from "react"
+import DropZone from "../../Components/DropZone"
+
 function PrendasAdd() {
+    const [files, setFiles] = useState<File[]>()
+
     return (
         <div className="prendas_add">
             <div className="titleWidthSearch">
@@ -34,14 +39,7 @@ function PrendasAdd() {
                     <button className="buttonB">Seleccionar Talles</button>
                     <button className="buttonC">Seleccionar Colores</button>
                 </form>
-                <div className="images">
-                    <div className="add">
-                        <i className="fa-solid fa-cloud-arrow-up"></i>
-                        <h2>Arrastre y suelte sus archivos aquí</h2>
-                        <p>O</p>
-                        <h3>Buscar archivos</h3>
-                    </div>
-                </div>
+                <DropZone setFiles={setFiles}/>
             </div>
         </div>
     )
