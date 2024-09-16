@@ -7,8 +7,10 @@ import { action as deleteColor } from "../../Components/Productos/ColorElement";
 import Talles, { loader as tallesLoader } from "./Talles";
 import Categorias, { loader as categoriasLoader } from "./Categorias";
 import { action as deleteCategoria } from "../../Components/Productos/CategoriaElement"
-import TallesEdit, {loader as tallesByCategoriaLoader} from "./TallesEdit";
-import {action as deleteTalle} from "../../Components/Productos/TalleEditElement"
+import TallesEdit, { loader as tallesByCategoriaLoader } from "./TallesEdit";
+import { action as deleteTalle } from "../../Components/Productos/TalleEditElement"
+import Prendas, {loader as prendasLoader} from "./Prendas";
+import PrendasAdd from "./PrendasAdd";
 
 const productosRoute: RouteObject =
 {
@@ -51,6 +53,15 @@ const productosRoute: RouteObject =
         {
             path: 'Categorias/:ID/delete',
             action: deleteCategoria
+        },
+        {
+            path: 'Prendas',
+            element: <Prendas />,
+            loader: prendasLoader
+        },
+        {
+            path: 'Prendas/add',
+            element: <PrendasAdd/>
         }
     ]
 }
