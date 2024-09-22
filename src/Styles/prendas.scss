@@ -120,5 +120,19 @@
                 background-color: #ac0d2d;
             }
         }
+
+        .buttonA{
+            font-size: 1.6rem;
+            margin-top: 2rem;
+            border: none;
+            height: 3rem;
+            cursor: pointer;
+            background-color: #256dbf;
+
+            &:hover {
+                transition: background-color 0.3s;
+                background-color: #1e5da4;
+            }
+        }
     }
 }

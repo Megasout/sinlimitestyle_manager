@@ -38,8 +38,9 @@ function PrendasAdd() {
                         placeholder="Descuento %" />
                     <button className="buttonB">Seleccionar Talles</button>
                     <button className="buttonC">Seleccionar Colores</button>
+                    <button className="buttonA" type="submit">Guardar</button>
                 </form>
-                <DropZone setFiles={setFiles}/>
+                <DropZone setFiles={setFiles} files={files}/>
             </div>
         </div>
     )
