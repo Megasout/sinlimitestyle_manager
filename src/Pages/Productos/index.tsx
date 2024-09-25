@@ -11,6 +11,7 @@ import TallesEdit, { loader as tallesByCategoriaLoader } from "./TallesEdit";
 import { action as deleteTalle } from "../../Components/Productos/TalleEditElement"
 import Prendas, {loader as prendasLoader} from "./Prendas";
 import PrendasAdd from "./PrendasAdd";
+import PrendasEdit from "./PrendasEdit";
 
 const productosRoute: RouteObject =
 {
@@ -61,7 +62,12 @@ const productosRoute: RouteObject =
         },
         {
             path: 'Prendas/add',
-            element: <PrendasAdd/>
+            element: <PrendasAdd/>,
+            loader: prendasLoader
+        },
+        {
+            path: 'Prendas/:ID/edit',
+            element: <PrendasEdit/>
         }
     ]
 }
