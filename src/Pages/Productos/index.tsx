@@ -9,9 +9,12 @@ import Categorias, { loader as categoriasLoader } from "./Categorias";
 import { action as deleteCategoria } from "../../Components/Productos/CategoriaElement"
 import TallesEdit, { loader as tallesByCategoriaLoader } from "./TallesEdit";
 import { action as deleteTalle } from "../../Components/Productos/TalleEditElement"
-import Prendas, {loader as prendasLoader} from "./Prendas";
+import Prendas, { loader as prendasLoader } from "./Prendas";
 import PrendasAdd from "./PrendasAdd";
-import PrendasEdit from "./PrendasEdit";
+import PrendasEdit, { loader as prendaEditLoader } from "./PrendasEdit";
+import PrendaTalle from "./PrendaTalle";
+import PrendaImagenes from "./PrendaImagenes";
+import PrendaColores from "./PrendaColores";
 
 const productosRoute: RouteObject =
 {
@@ -62,12 +65,26 @@ const productosRoute: RouteObject =
         },
         {
             path: 'Prendas/add',
-            element: <PrendasAdd/>,
+            element: <PrendasAdd />,
             loader: prendasLoader
         },
         {
             path: 'Prendas/:ID/edit',
-            element: <PrendasEdit/>
+            loader: prendaEditLoader,
+            element: <PrendasEdit />
+        },
+        {
+            path: 'Prendas/:ID/edit/talles',
+            element: <PrendaTalle />,
+            loader: prendasLoader
+        },
+        {
+            path: 'Prendas/:ID/edit/colores',
+            element: <PrendaColores />
+        },
+        {
+            path: 'Prendas/:ID/edit/imagenes',
+            element: <PrendaImagenes/>
         }
     ]
 }

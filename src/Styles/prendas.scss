@@ -32,11 +32,15 @@
 
 .prendas .list {
     display: grid;
-    grid-template-columns: repeat(5, 200px);
+    grid-template-columns: repeat(4, 200px);
     gap: 2rem;
     align-self: center;
     margin-top: 2rem;
     margin-bottom: 2rem;
+
+    @media (min-width: 1580px) {
+        grid-template-columns: repeat(5, 200px);
+    }
 }
 
 .prendas .list .block {
@@ -69,6 +73,7 @@
     .content {
         display: flex;
         justify-content: space-between;
+        margin-bottom: 2rem;
     }
 
     .data {
@@ -93,7 +98,8 @@
         }
 
         .buttonB,
-        .buttonC {
+        .buttonC,
+        .buttonD {
             font-size: 1.3rem;
             margin-top: 1.3rem;
             border: none;
@@ -121,6 +127,14 @@
             }
         }
 
+        .buttonD{
+            background-color: #027927;
+
+            &:hover {
+                background-color: #059a34;
+            }
+        }
+
         .buttonA{
             font-size: 1.6rem;
             margin-top: 2rem;
@@ -134,5 +148,13 @@
                 background-color: #1e5da4;
             }
         }
+    }
+
+    .edit .data input{
+        width: 536px;
+    }
+
+    .edit{
+        align-self: center;
     }
 }

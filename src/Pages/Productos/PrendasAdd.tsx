@@ -106,6 +106,7 @@ function PrendasAdd() {
                     <input
                         name="off"
                         min={0}
+                        max={100}
                         value={prenda.off}
                         onChange={handleInputChange}
                         type="number"
@@ -120,7 +121,7 @@ function PrendasAdd() {
 
 export default PrendasAdd
 
-type PrendaType = {
+export type PrendaType = {
     name: string,
     category: number,
     material: string,

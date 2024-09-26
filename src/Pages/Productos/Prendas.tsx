@@ -8,15 +8,16 @@ import { filterbyName } from "../../Helpers"
 import "../../Styles/prendas.scss"
 
 export async function loader() {
-    const [categorias] = await Promise.all([
+    const [categorias, prendas] = await Promise.all([
         getFromTable('/get/categorias/bytype/Ropa'),
+        getFromTable('/get/prendas')
     ])
 
-    return { categorias: categorias }
+    return { categorias: categorias, prendas: prendas }
 }
 
 function Prendas() {
-    const { categorias } = useLoaderData() as any
+    const { categorias, prendas } = useLoaderData() as any
 
     const [filter, setFileter] = useState("")
     const [isLoader, setLoader] = useState(false)
@@ -43,29 +44,9 @@ function Prendas() {
                 <div className="add" onClick={() => navigator('./add')}>
                     <i className="fa-solid fa-plus"></i>
                 </div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
-                <div className="block"></div>
 
+                {prendas.map((prenda: any) => 
+                    <div className="block"></div>)}
             </div>
 
             <Loader loader={isLoader} />
