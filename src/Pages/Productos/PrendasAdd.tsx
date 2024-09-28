@@ -121,7 +121,7 @@ function PrendasAdd() {
 
 export default PrendasAdd
 
-export type PrendaType = {
+type PrendaType = {
     name: string,
     category: number,
     material: string,
