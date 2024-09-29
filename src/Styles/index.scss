@@ -72,6 +72,42 @@ $TittleFont: "Poppins", sans-serif;
   }
 }
 
+.titleWithBackButton{
+  display: flex;
+  // justify-content: space-between;
+  align-items: center;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  margin-bottom: 1rem;
+  background-color: #141519;
+
+  h1 {
+    margin-bottom: 0.5rem;
+    font-family: $TittleFont;
+    font-weight: 500;
+    font-size: 3rem;
+  }
+
+  i {
+    background-color: #232323;
+    border-radius: 50px;
+    padding: 0.5rem;
+    padding-right: 1.2rem;
+    padding-left: 1.2rem;
+    margin-top: 1.5rem;
+    margin-right: 1rem;
+    font-size: 3rem;
+    color: #c2c2c2;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover{
+      background-color: #303030;
+    }
+  }
+
+}
+
 .dropzone_images {
   display: flex;
   flex-direction: column;

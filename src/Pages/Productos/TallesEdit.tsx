@@ -4,6 +4,8 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { postToTable } from "../../Models/post"
 import TalleEditElement from "../../Components/Productos/TalleEditElement"
 import Loader from "../../Components/Loader"
+import TitleWithBackButton from "../../Components/TitleWithBackButton"
+import TableLines from "../../Components/TableLines"
 
 export async function loader({ params }: any) {
     const id = params.ID
@@ -36,9 +38,7 @@ function TallesEdit() {
                 </div>
             }
 
-            <div className="heading">
-                <h1>{categoria.nombre}</h1>
-            </div>
+            <TitleWithBackButton direction="../Talles" title={categoria.nombre} />
 
             <div className="get">
                 <table>
@@ -53,13 +53,13 @@ function TallesEdit() {
                         </tr>
                     </thead>
                     <tbody>
-                        <Line />
+                        <TableLines lines={2} />
                         <AddTalle
                             route={`../Talles/${categoria.id}/edit`}
                             idCategoria={categoria.id}
                             setError={setError}
                             setLoader={setLoader} />
-                        <Line />
+                        <TableLines lines={2} />
                         {talles.map((talle: any) =>
                             <TalleEditElement
                                 key={talle.id}
@@ -70,7 +70,7 @@ function TallesEdit() {
                     </tbody>
                 </table>
             </div>
-            
+
             <Loader loader={loader} />
         </div >
     )
@@ -78,18 +78,6 @@ function TallesEdit() {
 
 export default TallesEdit
 
-function Line() {
-    return (
-        <tr>
-            <td>
-                <div className="line"></div>
-            </td>
-            <td>
-                <div className="line"></div>
-            </td>
-        </tr>
-    )
-}
 
 type AddTalleType = {
     setError: (value: boolean) => void,

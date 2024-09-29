@@ -7,6 +7,7 @@ import { postToTable } from "../../Models/post"
 import getFromTable from "../../Models/get"
 import CategoriaElement from "../../Components/Productos/CategoriaElement"
 import { filterbyName } from "../../Helpers"
+import TableLines from "../../Components/TableLines"
 
 export async function loader() {
     const result = await getFromTable('/get/categorias')
@@ -57,9 +58,9 @@ function Categorias() {
                         </tr>
                     </thead>
                     <tbody>
-                        <Line />
+                        <TableLines lines={3} />
                         <AddCategoria setError={setError} setLoader={setLoader} />
-                        <Line />
+                        <TableLines lines={3} />
                         {filterbyName(categorias, filter).map((categoria) =>
                             <CategoriaElement
                                 key={categoria.id}
@@ -80,22 +81,6 @@ function Categorias() {
 }
 
 export default Categorias
-
-function Line() {
-    return (
-        <tr>
-            <td>
-                <div className="line"></div>
-            </td>
-            <td>
-                <div className="line"></div>
-            </td>
-            <td>
-                <div className="line"></div>
-            </td>
-        </tr>
-    )
-}
 
 type AddCategoriaType = {
     setError: (value: boolean) => void,

@@ -1,8 +1,10 @@
-import { ChangeEvent, FormEvent, useState } from "react"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import getFromTable from "../../Models/get"
 import { useLoaderData, useNavigate } from "react-router-dom"
 import DropZoneOneImage from "../../Components/DropZoneOneImage"
 import { putToTableWithFormData } from "../../Models/put"
+import TitleWithBackButton from "../../Components/TitleWithBackButton"
+import Loader from "../../Components/Loader"
 
 export async function loader({ params }: any) {
     const id = params.ID
@@ -18,6 +20,7 @@ export async function loader({ params }: any) {
 function PrendasEdit() {
     const { prenda, miniatura } = useLoaderData() as any
     const navigator = useNavigate()
+    const [loader, setLoader] = useState(false)
 
     const [file, setFile] = useState<File>()
     const [url, setUrl] = useState<string>(miniatura ? miniatura.url : '')
@@ -38,6 +41,7 @@ function PrendasEdit() {
 
     const handleOnSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        setLoader(true)
 
         const formData = new FormData()
 
@@ -51,13 +55,16 @@ function PrendasEdit() {
         formData.append('descuento', prendaData.off.toString())
 
         await putToTableWithFormData(formData, `/put/prenda/${prenda.id}`)
+        return navigator(`../Prendas/${prenda.id}/edit`)
     }
-    
+
+    useEffect(() => {
+        setLoader(false)
+    }, [prenda])
+
     return (
         <div className="prendas_add">
-            <div className="titleWidthSearch">
-                <h1>Editar Prenda</h1>
-            </div>
+            <TitleWithBackButton direction="../Prendas" title="Editar Prenda" />
             <div className="content edit">
                 <form
                     method="POST"
@@ -110,17 +117,21 @@ function PrendasEdit() {
                         type="number"
                         placeholder="Descuento %" />
                     <button
+                        type="button"
                         onClick={() => navigator('./talles')}
                         className="buttonB">Seleccionar Categoria y Talles</button>
                     <button
+                        type="button"
                         onClick={() => navigator('./colores')}
                         className="buttonC">Seleccionar Colores</button>
                     <button
+                        type="button"
                         onClick={() => navigator('./imagenes')}
                         className="buttonD">Editar Imagenes</button>
                     <button className="buttonA" type="submit">Guardar</button>
                 </form>
             </div>
+            <Loader loader={loader} />
         </div>
     )
 }

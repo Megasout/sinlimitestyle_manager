@@ -7,6 +7,8 @@ import deleteFromTable from "../../Models/delete"
 import { putToTable } from "../../Models/put"
 import Confirm from "../../Components/Confirm"
 import Loader from "../../Components/Loader"
+import TitleWithBackButton from "../../Components/TitleWithBackButton"
+import TableLines from "../../Components/TableLines"
 
 export async function loader({ params }: any) {
     const id = params.ID
@@ -62,9 +64,7 @@ function PrendaTalle() {
 
     return (
         <div className="categorias">
-            <div className="titleWidthSearch">
-                <h1>Editar Talles</h1>
-            </div>
+            <TitleWithBackButton direction={`../Prendas/${prenda.id}/edit`} title="Editar Talles" />
             <p style={{ margin: '0.5rem', marginLeft: '1rem', fontSize: '1.6rem' }}>Categoria</p>
             <div style={{ display: "flex" }}>
                 <select
@@ -91,13 +91,13 @@ function PrendaTalle() {
                         </tr>
                     </thead>
                     <tbody>
-                        <Line />
+                        <TableLines lines={2} />
                         <AddTalle
                             idPrenda={prenda.id}
                             talles={categoriaSelect == -1 ? [] : filterbyCategoryId(talles, categoriaSelect).filter(
                                 talleS => !tallesProducto.some((talleP: any) => talleP.id === talleS.id))}
                             setLoader={setLoader} />
-                        <Line />
+                        <TableLines lines={2} />
                         <ShowTalles
                             idPrenda={prenda.id}
                             talles={tallesProducto}
@@ -114,19 +114,6 @@ function PrendaTalle() {
 
             <Loader loader={loader} />
         </div>
-    )
-}
-
-function Line() {
-    return (
-        <tr>
-            <td>
-                <div className="line"></div>
-            </td>
-            <td>
-                <div className="line"></div>
-            </td>
-        </tr>
     )
 }
 

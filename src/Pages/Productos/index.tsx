@@ -14,7 +14,7 @@ import PrendasAdd from "./PrendasAdd";
 import PrendasEdit, { loader as prendaEditLoader } from "./PrendasEdit";
 import PrendaTalle, { loader as prendaTalleLoader, action as deletePrendaTalle } from "./PrendaTalle";
 import PrendaImagenes from "./PrendaImagenes";
-import PrendaColores from "./PrendaColores";
+import PrendaColores, {loader as prendaColoresLoader, action as deletePrendaColor} from "./PrendaColores";
 
 const productosRoute: RouteObject =
 {
@@ -84,7 +84,12 @@ const productosRoute: RouteObject =
         },
         {
             path: 'Prendas/:ID/edit/colores',
-            element: <PrendaColores />
+            element: <PrendaColores />,
+            loader: prendaColoresLoader
+        },
+        {
+            path: 'Prendas/:ID/edit/colores/:COLORID/delete',
+            action: deletePrendaColor
         },
         {
             path: 'Prendas/:ID/edit/imagenes',

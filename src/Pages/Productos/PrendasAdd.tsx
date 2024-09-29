@@ -2,10 +2,13 @@ import { FormEvent, useState } from "react"
 import DropZone from "../../Components/DropZone"
 import { postToTableWithFormData } from "../../Models/post"
 import { useLoaderData, useNavigate } from "react-router-dom"
+import TitleWithBackButton from "../../Components/TitleWithBackButton"
+import Loader from "../../Components/Loader"
 
 function PrendasAdd() {
     const { categorias } = useLoaderData() as any
     const navigator = useNavigate()
+    const [loader, setLoader] = useState(false)
 
     const [files, setFiles] = useState<File[]>()
     const [prenda, setPrenda] = useState<PrendaType>({
@@ -19,6 +22,8 @@ function PrendasAdd() {
 
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+
+        setLoader(true)
 
         const formData = new FormData()
 
@@ -49,9 +54,7 @@ function PrendasAdd() {
 
     return (
         <div className="prendas_add">
-            <div className="titleWidthSearch">
-                <h1>Agregar Prenda</h1>
-            </div>
+            <TitleWithBackButton direction="../Prendas" title="Agregar Prenda"/>
             <div className="content">
                 <form
                     method="POST"
@@ -115,6 +118,7 @@ function PrendasAdd() {
                 </form>
                 <DropZone setFiles={setFiles} files={files} />
             </div>
+            <Loader loader={loader}/>
         </div>
     )
 }
