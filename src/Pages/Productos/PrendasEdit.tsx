@@ -52,9 +52,7 @@ function PrendasEdit() {
 
         await putToTableWithFormData(formData, `/put/prenda/${prenda.id}`)
     }
-
-    console.log(miniatura)
-
+    
     return (
         <div className="prendas_add">
             <div className="titleWidthSearch">

@@ -50,7 +50,7 @@ function Prendas() {
                         categoriaSelect == -1 ? prendas :
                             filterbyCategoryId(prendas, categoriaSelect) :
                         prendas.filter((prenda: any) => prenda.id_categoria == undefined), filter).map((prenda: any) =>
-                            <div>
+                            <div key={prenda.id}>
                                 <div
                                     className="block"
                                     onClick={() => navigator(`./${prenda.id}/edit`)}>

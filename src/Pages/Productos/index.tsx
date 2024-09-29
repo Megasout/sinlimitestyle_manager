@@ -12,7 +12,7 @@ import { action as deleteTalle } from "../../Components/Productos/TalleEditEleme
 import Prendas, { loader as prendasLoader } from "./Prendas";
 import PrendasAdd from "./PrendasAdd";
 import PrendasEdit, { loader as prendaEditLoader } from "./PrendasEdit";
-import PrendaTalle from "./PrendaTalle";
+import PrendaTalle, { loader as prendaTalleLoader, action as deletePrendaTalle } from "./PrendaTalle";
 import PrendaImagenes from "./PrendaImagenes";
 import PrendaColores from "./PrendaColores";
 
@@ -76,7 +76,11 @@ const productosRoute: RouteObject =
         {
             path: 'Prendas/:ID/edit/talles',
             element: <PrendaTalle />,
-            loader: prendasLoader
+            loader: prendaTalleLoader,
+        },
+        {
+            path: 'Prendas/:ID/edit/talles/:TALLEID/delete',
+            action: deletePrendaTalle
         },
         {
             path: 'Prendas/:ID/edit/colores',
@@ -84,7 +88,7 @@ const productosRoute: RouteObject =
         },
         {
             path: 'Prendas/:ID/edit/imagenes',
-            element: <PrendaImagenes/>
+            element: <PrendaImagenes />
         }
     ]
 }
