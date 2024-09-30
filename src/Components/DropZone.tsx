@@ -3,14 +3,17 @@ import { useDropzone } from "react-dropzone"
 
 type DropZoneType = {
     setFiles: (files: File[]) => void,
-    files?: File[]
+    files?: File[],
+    setUrls?: (urls: ImageType[]) => void,
+    urls?: ImageType[],
+    className?: string
 }
 
 function DropZone(prop: DropZoneType) {
-    const { files, setFiles } = prop
+    const { files, setFiles, className, urls, setUrls } = prop
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
-        if (files && files.length == 10 || files && files.length + acceptedFiles.length > 10){
+        if (!canAcceptFiles(acceptedFiles.length, files ? files.length : 0, urls ? urls.length : 0)) {
             alert('No se puede superar el limite de 10 imagenes')
             return
         }
@@ -26,10 +29,14 @@ function DropZone(prop: DropZoneType) {
         setFiles(files?.filter((_, oIndex) => oIndex !== index)!)
     }
 
+    const deleteUrl = (index: number) => {
+        setUrls!(urls?.filter((_, oIndex) => oIndex !== index)!)
+    }
+
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: { 'image/*': [] } })
 
     return (
-        <div className="dropzone_images">
+        <div className={`dropzone_images ${className && className}`}>
             <div className={`add ${isDragActive ? 'isDragActive' : ''}`}>
                 <i className="fa-solid fa-cloud-arrow-up"></i>
                 <h2>{`${isDragActive ? 'Suelta el archivo para subir' : 'Arrastre y suelte sus imágenes aquí'}`}</h2>
@@ -43,13 +50,21 @@ function DropZone(prop: DropZoneType) {
 
             <div className="images_list">
                 <div className="images">
+                    {urls &&
+                        urls.map((url, index) =>
+                            <ShowImage
+                                key={index}
+                                deleteImage={deleteUrl}
+                                index={index}
+                                url={url.url} />)}
                     {!files ?
                         <></> :
                         files.map((file, index) =>
-                            <div key={index} className="image">
-                                <i onClick={() => deleteImage(index)} className="fa-solid fa-xmark"></i>
-                                <img src={URL.createObjectURL(file)}></img>
-                            </div>)}
+                            <ShowImage
+                                key={index}
+                                deleteImage={deleteImage}
+                                index={index}
+                                url={URL.createObjectURL(file)} />)}
                 </div>
             </div>
         </div>
@@ -57,3 +72,30 @@ function DropZone(prop: DropZoneType) {
 }
 
 export default DropZone
+
+
+type ShowImageType = {
+    index: number,
+    deleteImage: (value: number) => void,
+    url: string
+}
+
+function ShowImage(props: ShowImageType) {
+    const { deleteImage, index, url } = props
+
+    return (
+        <div className="image">
+            <i onClick={() => deleteImage(index)} className="fa-solid fa-xmark"></i>
+            <img src={url}></img>
+        </div>
+    )
+}
+
+type ImageType = {
+    id: number,
+    url: string
+}
+
+function canAcceptFiles(acceptedFiles: number, files: number, urls: number): boolean {
+    return acceptedFiles + files + urls <= 10
+}

@@ -13,7 +13,7 @@ import Prendas, { loader as prendasLoader } from "./Prendas";
 import PrendasAdd from "./PrendasAdd";
 import PrendasEdit, { loader as prendaEditLoader } from "./PrendasEdit";
 import PrendaTalle, { loader as prendaTalleLoader, action as deletePrendaTalle } from "./PrendaTalle";
-import PrendaImagenes from "./PrendaImagenes";
+import PrendaImagenes, {loader as prendaImagenesLoader} from "./PrendaImagenes";
 import PrendaColores, {loader as prendaColoresLoader, action as deletePrendaColor} from "./PrendaColores";
 
 const productosRoute: RouteObject =
@@ -93,7 +93,8 @@ const productosRoute: RouteObject =
         },
         {
             path: 'Prendas/:ID/edit/imagenes',
-            element: <PrendaImagenes />
+            element: <PrendaImagenes />,
+            loader: prendaImagenesLoader
         }
     ]
 }
