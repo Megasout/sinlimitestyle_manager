@@ -77,7 +77,7 @@ function PrendasAdd() {
                         onChange={handleInputChange}>
                         <option value={-1}>---Sin Seleccionar---</option>
                         {categorias.map((categoria: any) =>
-                            <option value={categoria.id}>{categoria.nombre}</option>)}
+                            <option key={categoria.id} value={categoria.id}>{categoria.nombre}</option>)}
                     </select>
                     <label>Material</label>
                     <input

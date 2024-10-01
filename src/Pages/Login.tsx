@@ -117,7 +117,7 @@ function InputLogin(props: InputLoginType) {
                 name={name}
                 type={showButton && showText ? "text" : type}
                 value={value} onChange={handleOnChange} />
-            {showButton && <button type="button" onClick={handleShowButton}>{showText ? "OCULTAR" : "MOSTRAR"}</button>}
+            {showButton && <button style={{userSelect: "none"}} type="button" onClick={handleShowButton}>{showText ? "OCULTAR" : "MOSTRAR"}</button>}
         </div>
     )
 }

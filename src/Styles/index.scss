@@ -52,6 +52,7 @@ $TittleFont: "Poppins", sans-serif;
 
   &:focus-within {
     i {
+      user-select: none;
       color: white;
     }
   }
@@ -89,6 +90,7 @@ $TittleFont: "Poppins", sans-serif;
   }
 
   i {
+    user-select: none;
     background-color: #232323;
     border-radius: 50px;
     padding: 0.5rem;
@@ -374,5 +376,18 @@ $TittleFont: "Poppins", sans-serif;
     button:nth-child(2) {
       background-color: #256dbf;
     }
+  }
+}
+
+.menu_title{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+
+  h1{
+    user-select: none;
+    font-size: 4.5rem;
+    color: gray;
   }
 }

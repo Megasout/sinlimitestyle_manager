@@ -57,11 +57,11 @@ function Prendas() {
                                     {buscarPosicionPorIdProducto(miniaturas, prenda.id) === -1 ?
                                         <div>
                                             <i className="fa-regular fa-image"></i>
-                                            <p>Sin Miniatura</p>
+                                            <p style={{userSelect: "none"}}>Sin Miniatura</p>
                                         </div> :
                                         <img src={miniaturas[buscarPosicionPorIdProducto(miniaturas, prenda.id)].url}></img>}
                                 </div>
-                                <p className="title">{prenda.nombre}</p>
+                                <p style={{userSelect: "none"}} className="title">{prenda.nombre}</p>
                             </div>
                         )
                 }

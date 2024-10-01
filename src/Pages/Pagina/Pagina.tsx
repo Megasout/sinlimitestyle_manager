@@ -1,6 +1,7 @@
 function Pagina() {
     return (
-        <div>
+        <div className="menu_title">
+            <h1>Pagina</h1>
         </div>
     )
 }

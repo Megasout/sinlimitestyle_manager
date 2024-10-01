@@ -3,13 +3,9 @@ import Layout, { loader as layoutLoader } from "./Components/Layout";
 import Login, { loader as loginLoader, action as loginAction } from "./Pages/Login";
 import Home from "./Pages/Home";
 import Compras from "./Pages/Compras/Compras";
-import Productos from "./Pages/Productos/Productos";
 import Usuarios from "./Pages/Usuarios/Usuarios";
 import Pagina from "./Pages/Pagina/Pagina";
-import LayoutProductos from "./Components/LayoutProductos";
 import LayoutPage from "./Components/LayoutPage";
-import Colores, {loader as coloresLoader} from "./Pages/Productos/Colores";
-import {action as deleteColor} from "./Components/Productos/ColorElement";
 import productosRoute from "./Pages/Productos";
 
 const router = createBrowserRouter([

@@ -1,6 +1,6 @@
 @import "index.scss";
 
-.layout{
+.layout {
     position: relative;
     display: grid;
     grid-template-columns: 300px 1fr;
@@ -10,7 +10,7 @@
     }
 }
 
-.layout .side_menu{
+.layout .side_menu {
     position: sticky;
     top: 0px;
     bottom: 0px;
@@ -18,35 +18,36 @@
     background-color: #256dbf;
 }
 
-.layout .navigation{
+.layout .navigation {
     display: flex;
     flex-direction: column;
 
-    nav{
+    nav {
         display: flex;
         flex-direction: column;
         gap: 0.2rem;
 
-        .side_menu_button{
+        .side_menu_button {
             display: flex;
-            // justify-content: space-between;
+            user-select: none;
             padding: 0.5rem;
             padding-right: 1rem;
             padding-left: 1rem;
             cursor: pointer;
             transition: background-color 0.2s ease;
 
-            &:hover{
+            &:hover {
                 background-color: #2c82e4;
 
-                a, i{
+                a,
+                i {
                     transition: color 0.2s ease;
                     color: #dedddd;
                 }
             }
         }
 
-        i{
+        i {
             font-size: 33px;
             width: 43px;
             height: 33px;
@@ -58,12 +59,12 @@
             }
         }
 
-        a{
+        a {
             padding-left: 1rem;
             text-decoration: none;
             color: white;
             font-size: 1.4rem;
-            
+
             @media (min-width: 1400px) {
                 padding-left: 2rem;
                 font-size: 1.8rem;
@@ -71,7 +72,7 @@
         }
     }
 
-    .line{
+    .line {
         width: 95%;
         align-self: center;
         height: 1px;
@@ -81,13 +82,13 @@
     }
 }
 
-.layout .navigation h1{
+.layout .navigation h1 {
     padding: 1rem;
     font-weight: 500;
     font-family: $TittleFont;
 }
 
-.layout .page{
+.layout .page {
     height: 100%;
     width: 100%;
 }

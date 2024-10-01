@@ -67,6 +67,7 @@
     }
 
     i {
+        user-select: none;
         font-size: 3rem;
         text-align: center;
     }
@@ -78,6 +79,7 @@
 
 .prendas .list .add {
     background-color: gray;
+    user-select: none;
     height: 200px;
     max-height: 200px;
     cursor: pointer;
