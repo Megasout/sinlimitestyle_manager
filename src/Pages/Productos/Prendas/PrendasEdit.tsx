@@ -1,10 +1,10 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react"
-import getFromTable from "../../Models/get"
+import getFromTable from "../../../Models/get"
 import { useLoaderData, useNavigate } from "react-router-dom"
-import DropZoneOneImage from "../../Components/DropZoneOneImage"
-import { putToTableWithFormData } from "../../Models/put"
-import TitleWithBackButton from "../../Components/TitleWithBackButton"
-import Loader from "../../Components/Loader"
+import DropZoneOneImage from "../../../Components/DropZoneOneImage"
+import { putToTableWithFormData } from "../../../Models/put"
+import TitleWithBackButton from "../../../Components/TitleWithBackButton"
+import Loader from "../../../Components/Loader"
 
 export async function loader({ params }: any) {
     const id = params.ID

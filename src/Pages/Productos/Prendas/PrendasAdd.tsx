@@ -1,9 +1,9 @@
 import { FormEvent, useState } from "react"
-import DropZone from "../../Components/DropZone"
-import { postToTableWithFormData } from "../../Models/post"
+import DropZone from "../../../Components/DropZone"
+import { postToTableWithFormData } from "../../../Models/post"
 import { useLoaderData, useNavigate } from "react-router-dom"
-import TitleWithBackButton from "../../Components/TitleWithBackButton"
-import Loader from "../../Components/Loader"
+import TitleWithBackButton from "../../../Components/TitleWithBackButton"
+import Loader from "../../../Components/Loader"
 
 function PrendasAdd() {
     const { categorias } = useLoaderData() as any

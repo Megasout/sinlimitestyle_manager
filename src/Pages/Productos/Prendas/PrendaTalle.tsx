@@ -1,14 +1,14 @@
 import { Form, redirect, useLoaderData, useNavigate } from "react-router-dom"
-import getFromTable from "../../Models/get"
+import getFromTable from "../../../Models/get"
 import React, { FormEvent, useEffect, useState } from "react"
-import { filterbyCategoryId } from "../../Helpers"
-import { postToTable } from "../../Models/post"
-import deleteFromTable from "../../Models/delete"
-import { putToTable } from "../../Models/put"
-import Confirm from "../../Components/Confirm"
-import Loader from "../../Components/Loader"
-import TitleWithBackButton from "../../Components/TitleWithBackButton"
-import TableLines from "../../Components/TableLines"
+import { filterbyCategoryId } from "../../../Helpers"
+import { postToTable } from "../../../Models/post"
+import deleteFromTable from "../../../Models/delete"
+import { putToTable } from "../../../Models/put"
+import Confirm from "../../../Components/Confirm"
+import Loader from "../../../Components/Loader"
+import TitleWithBackButton from "../../../Components/TitleWithBackButton"
+import TableLines from "../../../Components/TableLines"
 
 export async function loader({ params }: any) {
     const id = params.ID

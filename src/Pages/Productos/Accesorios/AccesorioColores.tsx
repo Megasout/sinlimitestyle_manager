@@ -1,43 +1,43 @@
 import { Form, redirect, useLoaderData, useNavigate } from "react-router-dom"
-import TitleWithBackButton from "../../Components/TitleWithBackButton"
-import getFromTable from "../../Models/get"
+import TitleWithBackButton from "../../../Components/TitleWithBackButton"
+import getFromTable from "../../../Models/get"
 import { FormEvent, useEffect, useState } from "react"
-import Loader from "../../Components/Loader"
-import TableLines from "../../Components/TableLines"
-import { postToTable } from "../../Models/post"
-import deleteFromTable from "../../Models/delete"
+import Loader from "../../../Components/Loader"
+import TableLines from "../../../Components/TableLines"
+import { postToTable } from "../../../Models/post"
+import deleteFromTable from "../../../Models/delete"
 
 export async function loader({ params }: any) {
     const id = params.ID
 
-    const [colores, coloresPrenda] = await Promise.all([
+    const [colores, coloresAccesorio] = await Promise.all([
         getFromTable(`/get/colores`),
-        getFromTable(`/get/colores/prenda/${id}`)
+        getFromTable(`/get/colores/accesorio/${id}`)
     ])
 
-    return { prendaId: id, colores: colores, coloresPrenda: coloresPrenda }
+    return { accesorioId: id, colores: colores, coloresAccesorio: coloresAccesorio }
 }
 
 export async function action({ params }: any) {
     const idC = params.COLORID
-    const idP = params.ID
+    const idA = params.ID
 
-    await deleteFromTable(`/delete/color/${idC}/prenda/${idP}`)
+    await deleteFromTable(`/delete/color/${idC}/accesorio/${idA}`)
 
-    return redirect(`../Prendas/${idP}/edit/colores`)
+    return redirect(`../Accesorios/${idA}/edit/colores`)
 }
 
-function PrendaColores() {
-    const { prendaId, colores, coloresPrenda } = useLoaderData() as any
+function AccesorioColores() {
+    const { accesorioId, colores, coloresAccesorio } = useLoaderData() as any
     const [loader, setLoader] = useState(false)
 
     useEffect(() => {
         setLoader(false)
-    }, [coloresPrenda])
+    }, [coloresAccesorio])
 
     return (
         <div className="categorias">
-            <TitleWithBackButton direction={`../Prendas/${prendaId}/edit`} title="Editar Colores" />
+            <TitleWithBackButton direction={`../Accesorios/${accesorioId}/edit`} title="Editar Colores" />
             <div className="get">
                 <table>
                     <thead>
@@ -57,14 +57,14 @@ function PrendaColores() {
                         <TableLines lines={3} />
                         <AddColor
                             colors={colores.filter((col: any) =>
-                                !coloresPrenda.some((pre: any) => col.id === pre.id))}
-                            prendaId={prendaId}
+                                !coloresAccesorio.some((pre: any) => col.id === pre.id))}
+                            accesorioId={accesorioId}
                             setLoader={setLoader}
                             loader={loader} />
                         <TableLines lines={3} />
                         <ShowColors
-                            colors={coloresPrenda}
-                            prendaId={prendaId}
+                            colors={coloresAccesorio}
+                            accesorioId={accesorioId}
                             setLoader={setLoader} />
                     </tbody>
                 </table>
@@ -75,17 +75,17 @@ function PrendaColores() {
     )
 }
 
-export default PrendaColores
+export default AccesorioColores
 
 type AddColorType = {
     colors: Array<any>,
     loader: boolean,
     setLoader: (value: boolean) => void,
-    prendaId: number
+    accesorioId: number
 }
 
 function AddColor(prop: AddColorType) {
-    const { colors, setLoader, loader, prendaId } = prop
+    const { colors, setLoader, loader, accesorioId } = prop
 
     const [colorSelect, setColor] = useState<number>(colors.length != 0 ? colors[0].id : -1)
     const navigator = useNavigate()
@@ -97,11 +97,11 @@ function AddColor(prop: AddColorType) {
 
         const data = {
             id_color: colorSelect,
-            id_producto: prendaId
+            id_accesorio: accesorioId
         }
 
-        await postToTable(data, '/post/color/prenda')
-        return navigator(`../Prendas/${prendaId}/edit/colores`)
+        await postToTable(data, '/post/color/accesorio')
+        return navigator(`../Accesorios/${accesorioId}/edit/colores`)
     }
 
     useEffect(() => {
@@ -148,12 +148,12 @@ function AddColor(prop: AddColorType) {
 
 type ShowColorsType = {
     colors: Array<any>,
-    prendaId: number,
+    accesorioId: number,
     setLoader: (value: boolean) => void
 }
 
 function ShowColors(prop: ShowColorsType) {
-    const { colors, prendaId, setLoader } = prop
+    const { colors, accesorioId, setLoader } = prop
 
     return colors.map((color: any) =>
         <tr key={color.id} className="item">
@@ -167,7 +167,7 @@ function ShowColors(prop: ShowColorsType) {
             </td>
             <td className="actions">
                 <Form
-                    action={`../Prendas/${prendaId}/edit/colores/${color.id}/delete`}
+                    action={`../Accesorios/${accesorioId}/edit/colores/${color.id}/delete`}
                     method="POST"
                     onSubmit={(e) => {
                         if (!confirm(`Quiere eliminar el Color: ${color.nombre}?`))

@@ -1,23 +1,21 @@
-import {useState } from "react"
-import TitleWithSearch from "../../Components/TitleWithSearch"
-import getFromTable from "../../Models/get"
 import { useLoaderData, useNavigate } from "react-router-dom"
-import { filterbyCategoryId, filterbyName } from "../../Helpers"
-
-import "../../Styles/prendas.scss"
+import getFromTable from "../../../Models/get"
+import { useState } from "react"
+import TitleWithSearch from "../../../Components/TitleWithSearch"
+import { filterbyCategoryId, filterbyName } from "../../../Helpers"
 
 export async function loader() {
-    const [categorias, prendas, miniaturas] = await Promise.all([
-        getFromTable('/get/categorias/bytype/Ropa'),
-        getFromTable('/get/prendas'),
-        getFromTable('/get/miniaturas/prendas')
+    const [categorias, accesorios, miniaturas] = await Promise.all([
+        getFromTable('/get/categorias/bytype/Accesorio'),
+        getFromTable('/get/accesorios'),
+        getFromTable('/get/miniaturas/accesorios')
     ])
 
-    return { categorias: categorias, prendas: prendas, miniaturas: miniaturas }
+    return { categorias: categorias, accesorios: accesorios, miniaturas: miniaturas }
 }
 
-function Prendas() {
-    const { categorias, prendas, miniaturas } = useLoaderData() as any
+function Accesorios() {
+    const { categorias, accesorios, miniaturas } = useLoaderData() as any
 
     const [filter, setFileter] = useState("")
     const [categoriaSelect, setCategoria] = useState(-1)
@@ -28,7 +26,7 @@ function Prendas() {
             <TitleWithSearch
                 filter={filter}
                 onChange={(value) => setFileter(value)}
-                title="Prendas" />
+                title="Accesorios" />
 
             <div className="filtro">
                 <h3>Filtro</h3>
@@ -47,21 +45,21 @@ function Prendas() {
 
                 {
                     filterbyName(categoriaSelect !== -2 ?
-                        categoriaSelect == -1 ? prendas :
-                            filterbyCategoryId(prendas, categoriaSelect) :
-                        prendas.filter((prenda: any) => prenda.id_categoria == undefined), filter).map((prenda: any) =>
-                            <div key={prenda.id}>
+                        categoriaSelect == -1 ? accesorios :
+                            filterbyCategoryId(accesorios, categoriaSelect) :
+                            accesorios.filter((accesorio: any) => accesorio.id_categoria == undefined), filter).map((accesorio: any) =>
+                            <div key={accesorio.id}>
                                 <div
                                     className="block"
-                                    onClick={() => navigator(`./${prenda.id}/edit`)}>
-                                    {buscarPosicionPorIdProducto(miniaturas, prenda.id) === -1 ?
+                                    onClick={() => navigator(`./${accesorio.id}/edit`)}>
+                                    {buscarPosicionPorIdAccesorio(miniaturas, accesorio.id) === -1 ?
                                         <div>
                                             <i className="fa-regular fa-image"></i>
                                             <p>Sin Miniatura</p>
                                         </div> :
-                                        <img src={miniaturas[buscarPosicionPorIdProducto(miniaturas, prenda.id)].url}></img>}
+                                        <img src={miniaturas[buscarPosicionPorIdAccesorio(miniaturas, accesorio.id)].url}></img>}
                                 </div>
-                                <p className="title">{prenda.nombre}</p>
+                                <p className="title">{accesorio.nombre}</p>
                             </div>
                         )
                 }
@@ -70,8 +68,8 @@ function Prendas() {
     )
 }
 
-function buscarPosicionPorIdProducto(miniaturas: any, id_producto: any): number {
-    return miniaturas.findIndex((miniatura: any) => miniatura.id_producto === id_producto);
+function buscarPosicionPorIdAccesorio(miniaturas: any, id_accesorio: any): number {
+    return miniaturas.findIndex((miniatura: any) => miniatura.id_accesorio === id_accesorio);
 }
 
-export default Prendas
+export default Accesorios

@@ -1,21 +1,21 @@
 import { FormEvent, useEffect, useState } from "react"
-import Loader from "../../Components/Loader"
-import TitleWithBackButton from "../../Components/TitleWithBackButton"
-import getFromTable from "../../Models/get"
+import Loader from "../../../Components/Loader"
+import TitleWithBackButton from "../../../Components/TitleWithBackButton"
+import getFromTable from "../../../Models/get"
 import { useLoaderData, useNavigate } from "react-router-dom"
-import DropZone from "../../Components/DropZone"
-import { putToTableWithFormData } from "../../Models/put"
+import DropZone from "../../../Components/DropZone"
+import { putToTableWithFormData } from "../../../Models/put"
 
 export async function loader({ params }: any) {
     const id = params.ID
 
-    const imagenes = await getFromTable(`/get/imagenes/prenda/${id}`)
+    const imagenes = await getFromTable(`/get/imagenes/accesorio/${id}`)
 
-    return { prendaId: id, imagenes: imagenes }
+    return { accesorioId: id, imagenes: imagenes }
 }
 
-function PrendaImagenes() {
-    const { prendaId, imagenes } = useLoaderData() as any
+function AccesorioImagenes() {
+    const { accesorioId, imagenes } = useLoaderData() as any
     const navigator = useNavigate()
     const [loader, setLoader] = useState(false)
     const [files, setFiles] = useState<File[]>()
@@ -46,9 +46,9 @@ function PrendaImagenes() {
 
         formData.append('delete_urls', JSON.stringify(deleteImages))
 
-        await putToTableWithFormData(formData, `/put/imagenes/prenda/${prendaId}`)
+        await putToTableWithFormData(formData, `/put/imagenes/accesorio/${accesorioId}`)
 
-        return navigator(`../Prendas/${prendaId}/edit/imagenes`)
+        return navigator(`../Accesorios/${accesorioId}/edit/imagenes`)
     }
 
     useEffect(() => {
@@ -57,7 +57,7 @@ function PrendaImagenes() {
 
     return (
         <div className="prenda_imagenes">
-            <TitleWithBackButton direction={`../Prendas/${prendaId}/edit`} title="Editar Imagenes" />
+            <TitleWithBackButton direction={`../Accesorios/${accesorioId}/edit`} title="Editar Imagenes" />
             <DropZone className="drop" files={files} setFiles={setFiles} urls={urls} setUrls={setUrls} />
             <form
                 method="POST"
@@ -70,7 +70,7 @@ function PrendaImagenes() {
     )
 }
 
-export default PrendaImagenes
+export default AccesorioImagenes
 
 type ImageType = {
     id: number,
