@@ -15,7 +15,6 @@ function PrendasAdd() {
         name: '',
         material: '',
         category: -1,
-        stock: 0,
         price: 0,
         off: 0
     })
@@ -34,7 +33,6 @@ function PrendasAdd() {
 
         formData.append('nombre', prenda.name)
         formData.append('material', prenda.material)
-        formData.append('stock', prenda.stock.toString())
         formData.append('precio', prenda.price.toString())
         formData.append('descuento', prenda.off.toString())
         if (prenda.category !== -1) {
@@ -87,15 +85,6 @@ function PrendasAdd() {
                         type="text"
                         placeholder="Materiales..."
                         required />
-                    <label>Stock</label>
-                    <input
-                        name="stock"
-                        min={0}
-                        value={prenda.stock}
-                        onChange={handleInputChange}
-                        type="number"
-                        placeholder="Cantidad en stock"
-                        required />
                     <label>Precio</label>
                     <input
                         name="price"
@@ -129,7 +118,6 @@ type PrendaType = {
     name: string,
     category: number,
     material: string,
-    stock: number,
     price: number,
     off: number
 }

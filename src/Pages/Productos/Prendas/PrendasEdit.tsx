@@ -5,6 +5,10 @@ import DropZoneOneImage from "../../../Components/DropZoneOneImage"
 import { putToTableWithFormData } from "../../../Models/put"
 import TitleWithBackButton from "../../../Components/TitleWithBackButton"
 import Loader from "../../../Components/Loader"
+import deleteFromTable from "../../../Models/delete"
+import Confirm from "../../../Components/Confirm"
+
+//TODO: agregar boton de ocultar o mostrar
 
 export async function loader({ params }: any) {
     const id = params.ID
@@ -22,6 +26,65 @@ function PrendasEdit() {
     const navigator = useNavigate()
     const [loader, setLoader] = useState(false)
 
+    const [confirm, setConfirm] = useState(false)
+
+    useEffect(() => {
+        setLoader(false)
+    }, [prenda])
+
+    const handleDeletePrenda = async () => {
+        try {
+            setLoader(true)
+            await deleteFromTable(`/delete/prenda/${prenda.id}`)
+            return navigator(`../Prendas`)
+
+        } catch (err) {
+            setLoader(false)
+            throw new Error('aaa')
+        }
+    }
+
+    return (
+        <div className="prendas_add">
+            <TitleWithBackButton
+                deleteButton
+                onClickDeleteButton={() => setConfirm(true)}
+                direction="../Prendas"
+                title="Editar Prenda" />
+            <ContentEdit
+                miniatura={miniatura}
+                prenda={prenda}
+                setLoader={setLoader} />
+            <Loader loader={loader} />
+            <Confirm
+                isActive={confirm}
+                message="Desea eliminar esta prenda?"
+                onResponse={handleDeletePrenda} setIsActive={setConfirm} />
+        </div>
+    )
+}
+
+export default PrendasEdit
+
+type PrendaType = {
+    name: string,
+    material: string,
+    stock: number,
+    price: number,
+    off: number,
+    isActive: boolean
+}
+
+type ContentEditType = {
+    prenda: any,
+    miniatura: any,
+    setLoader: (value: boolean) => void
+}
+
+function ContentEdit(props: ContentEditType) {
+    const { prenda, miniatura, setLoader } = props
+    const navigator = useNavigate()
+
     const [file, setFile] = useState<File>()
     const [url, setUrl] = useState<string>(miniatura ? miniatura.url : '')
 
@@ -30,13 +93,18 @@ function PrendasEdit() {
         material: prenda.material,
         off: prenda.descuento,
         price: prenda.precio,
-        stock: prenda.stock
+        stock: prenda.stock,
+        isActive: prenda.activo
     } as PrendaType)
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target
+        const { name, value, type } = e.target
 
-        setPrenda(prev => ({ ...prev, [name]: value }))
+        if (type === 'checkbox') {
+            setPrenda(prev => ({ ...prev, [name]: !prendaData.isActive}))
+        } else {
+            setPrenda(prev => ({ ...prev, [name]: value }))
+        }
     }
 
     const handleOnSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -50,98 +118,81 @@ function PrendasEdit() {
 
         formData.append('nombre', prendaData.name)
         formData.append('material', prendaData.material)
-        formData.append('stock', prendaData.stock.toString())
         formData.append('precio', prendaData.price.toString())
         formData.append('descuento', prendaData.off.toString())
+        formData.append('activo', prendaData.isActive.toString())
 
         await putToTableWithFormData(formData, `/put/prenda/${prenda.id}`)
         return navigator(`../Prendas/${prenda.id}/edit`)
     }
 
-    useEffect(() => {
-        setLoader(false)
-    }, [prenda])
-
     return (
-        <div className="prendas_add">
-            <TitleWithBackButton direction="../Prendas" title="Editar Prenda" />
-            <div className="content edit">
-                <form
-                    method="POST"
-                    encType="multipart/form-data"
-                    onSubmit={handleOnSubmit}
-                    className="data">
-                    <label>Miniatura (Arrastre o busque una imagen)</label>
-                    <DropZoneOneImage className="p_dropzone" withOutText setFile={setFile} setURL={setUrl} file={file} url={url} />
-                    <label>Nombre</label>
+        <div className="content edit">
+            <form
+                method="POST"
+                encType="multipart/form-data"
+                onSubmit={handleOnSubmit}
+                className="data">
+                <label>Miniatura (Arrastre o busque una imagen)</label>
+                <DropZoneOneImage className="p_dropzone" withOutText setFile={setFile} setURL={setUrl} file={file} url={url} />
+                <label>Nombre</label>
+                <input
+                    name="name"
+                    value={prendaData.name}
+                    onChange={handleInputChange}
+                    type="text"
+                    placeholder="Nombre de la prenda..."
+                    required
+                />
+                <label>Material</label>
+                <input
+                    name="material"
+                    value={prendaData.material}
+                    onChange={handleInputChange}
+                    type="text"
+                    placeholder="Materiales..."
+                    required />
+                <label>Precio</label>
+                <input
+                    name="price"
+                    min={0}
+                    value={prendaData.price}
+                    onChange={handleInputChange}
+                    type="number"
+                    placeholder="Precio completo"
+                    required />
+                <label>Descuento %</label>
+                <input
+                    name="off"
+                    min={0}
+                    value={prendaData.off}
+                    onChange={handleInputChange}
+                    type="number"
+                    placeholder="Descuento %" />
+                <button
+                    type="button"
+                    onClick={() => navigator('./talles')}
+                    className="buttonB">Seleccionar Categoria y Talles</button>
+                <button
+                    type="button"
+                    onClick={() => navigator('./colores')}
+                    className="buttonC">Seleccionar Colores</button>
+                <button
+                    type="button"
+                    onClick={() => navigator('./imagenes')}
+                    className="buttonD">Editar Imagenes</button>
+                <div className="checkbox">
                     <input
-                        name="name"
-                        value={prendaData.name}
+                        id="check"
+                        type="checkbox"
+                        name="isActive"
+                        checked={prendaData.isActive}
                         onChange={handleInputChange}
-                        type="text"
-                        placeholder="Nombre de la prenda..."
-                        required
-                    />
-                    <label>Material</label>
-                    <input
-                        name="material"
-                        value={prendaData.material}
-                        onChange={handleInputChange}
-                        type="text"
-                        placeholder="Materiales..."
-                        required />
-                    <label>Stock</label>
-                    <input
-                        name="stock"
-                        min={0}
-                        value={prendaData.stock}
-                        onChange={handleInputChange}
-                        type="number"
-                        placeholder="Cantidad en stock"
-                        required />
-                    <label>Precio</label>
-                    <input
-                        name="price"
-                        min={0}
-                        value={prendaData.price}
-                        onChange={handleInputChange}
-                        type="number"
-                        placeholder="Precio completo"
-                        required />
-                    <label>Descuento %</label>
-                    <input
-                        name="off"
-                        min={0}
-                        value={prendaData.off}
-                        onChange={handleInputChange}
-                        type="number"
-                        placeholder="Descuento %" />
-                    <button
-                        type="button"
-                        onClick={() => navigator('./talles')}
-                        className="buttonB">Seleccionar Categoria y Talles</button>
-                    <button
-                        type="button"
-                        onClick={() => navigator('./colores')}
-                        className="buttonC">Seleccionar Colores</button>
-                    <button
-                        type="button"
-                        onClick={() => navigator('./imagenes')}
-                        className="buttonD">Editar Imagenes</button>
-                    <button className="buttonA" type="submit">Guardar</button>
-                </form>
-            </div>
-            <Loader loader={loader} />
+                    ></input>
+                    <label htmlFor="check">Mostrar Producto</label>
+                </div>
+                <button className="buttonA" type="submit">Guardar</button>
+            </form>
         </div>
     )
-}
-
-export default PrendasEdit
-
-type PrendaType = {
-    name: string,
-    material: string,
-    stock: number,
-    price: number,
-    off: number
 }

@@ -33,6 +33,7 @@ $TittleFont: "Poppins", sans-serif;
     font-family: $TittleFont;
     font-weight: 500;
     font-size: 3rem;
+    text-wrap: nowrap;
   }
 
   .search {
@@ -75,7 +76,6 @@ $TittleFont: "Poppins", sans-serif;
 
 .titleWithBackButton{
   display: flex;
-  // justify-content: space-between;
   align-items: center;
   padding-right: 1rem;
   padding-left: 1rem;
@@ -87,6 +87,7 @@ $TittleFont: "Poppins", sans-serif;
     font-family: $TittleFont;
     font-weight: 500;
     font-size: 3rem;
+    text-wrap: nowrap;
   }
 
   i {
@@ -108,6 +109,35 @@ $TittleFont: "Poppins", sans-serif;
     }
   }
 
+  button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
+    background-color: #232323;
+    border: none;
+    padding: 0.5rem;
+    padding-right: 0.8rem;
+    padding-left: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover{
+      background-color: #303030;
+    }
+
+    i{
+      padding: 0;
+      margin: 0;
+      border-radius: 0;
+      background-color: transparent;
+      color: rgb(196, 8, 8);
+
+      &:hover{
+        background-color: transparent;
+      }
+    }
+  }
 }
 
 .dropzone_images {
@@ -340,11 +370,12 @@ $TittleFont: "Poppins", sans-serif;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   align-items: center;
   justify-content: center;
   background-color: #00000065;
   backdrop-filter: blur(8px);
+  z-index: 10;
 
   h3:nth-child(1) {
     text-align: center;

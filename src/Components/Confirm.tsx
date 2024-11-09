@@ -1,3 +1,5 @@
+import { useEffect } from "react"
+
 type ConfirmType = {
     isActive: boolean,
     message: string,
@@ -13,6 +15,14 @@ function Confirm(props: ConfirmType) {
             onResponse()
         setIsActive(false)
     }
+
+    useEffect(() => {
+        if (isActive)
+            document.body.style.overflow = "hidden"
+        else
+            document.body.style.overflow = "auto"
+
+    }, [isActive])
 
     if (!isActive)
         return <></>

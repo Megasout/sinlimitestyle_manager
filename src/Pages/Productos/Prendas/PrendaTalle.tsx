@@ -10,6 +10,8 @@ import Loader from "../../../Components/Loader"
 import TitleWithBackButton from "../../../Components/TitleWithBackButton"
 import TableLines from "../../../Components/TableLines"
 
+//TODO: stok va talle cambiar eso
+
 export async function loader({ params }: any) {
     const id = params.ID
 

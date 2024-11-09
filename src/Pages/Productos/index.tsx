@@ -23,6 +23,7 @@ import AccesoriosEdit, { loader as accesorioEditLoader } from "./Accesorios/Acce
 import AccesorioTalle, { loader as accesorioTalleLoader, action as deleteAccesorioTalle } from "./Accesorios/AccesorioTalles";
 import AccesorioColores, {loader as accesorioColoresLoader, action as deleteAccesorioColor} from "./Accesorios/AccesorioColores";
 import AccesorioImagenes, {loader as accesorioImagenesLoader} from "./Accesorios/AccesorioImagenes";
+import ErrorPage from "../ErrorPage";
 
 const prendasRoute: RouteObject[] = [
     {
@@ -111,6 +112,7 @@ const productosRoute: RouteObject =
     path: '/Productos',
     element: <LayoutProductos />,
     loader: layoutLoader,
+    errorElement: <ErrorPage/>,
     children: [
         {
             index: true,

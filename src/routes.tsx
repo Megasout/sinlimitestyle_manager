@@ -7,18 +7,21 @@ import Usuarios from "./Pages/Usuarios/Usuarios";
 import Pagina from "./Pages/Pagina/Pagina";
 import LayoutPage from "./Components/LayoutPage";
 import productosRoute from "./Pages/Productos";
+import ErrorPage from "./Pages/ErrorPage";
 
 const router = createBrowserRouter([
     {
         path: '/login',
         element: <Login />,
         loader: loginLoader,
-        action: loginAction
+        action: loginAction,
+        errorElement: <ErrorPage/>
     },
     {
         path: '/',
         element: <Layout />,
         loader: layoutLoader,
+        errorElement: <ErrorPage/>,
         children: [
             {
                 index: true,
