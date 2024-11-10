@@ -10,36 +10,41 @@ import Loader from "../../../Components/Loader"
 import TitleWithBackButton from "../../../Components/TitleWithBackButton"
 import TableLines from "../../../Components/TableLines"
 
-//TODO: stok va talle cambiar eso
-
 export async function loader({ params }: any) {
     const id = params.ID
+    const type = params.TYPE
 
-    const [prenda, categorias, talles, tallesProducto] = await Promise.all([
-        getFromTable(`/get/prenda/${id}`),
-        getFromTable('/get/categorias/bytype/Ropa'),
+    if (type != 'Prendas' && type != 'Accesorios')
+        throw new Response('', {
+            status: 404
+        })
+
+    const [producto, categorias, talles, tallesProducto] = await Promise.all([
+        getFromTable(`/get/producto/${id}`),
+        getFromTable(`/get/categorias/bytype/${type == 'Prendas' ? 'prenda' : 'accesorio'}`),
         getFromTable(`/get/talles`),
-        getFromTable(`/get/talles/prenda/${id}`)
+        getFromTable(`/get/talles/producto/${id}`)
     ])
 
-    return { prenda: prenda[0], categorias: categorias, talles: talles, tallesProducto: tallesProducto }
+    return { producto: producto[0], categorias, talles, tallesProducto, type }
 }
 
 export async function action({ params }: any) {
     const idT = params.TALLEID
     const idP = params.ID
+    const type = params.TYPE
 
-    await deleteFromTable(`/delete/talle/${idT}/prenda/${idP}`)
+    await deleteFromTable(`/delete/talle/producto/${idT}`)
 
-    return redirect(`../Prendas/${idP}/edit/talles`)
+    return redirect(`../${type}/${idP}/edit/talles`)
 }
 
-function PrendaTalle() {
-    const { prenda, categorias, talles, tallesProducto } = useLoaderData() as any
+function ProductoTalle() {
+    const { producto, categorias, talles, tallesProducto, type } = useLoaderData() as any
     const navigator = useNavigate()
 
-    const [categoriaSelect, setCategoria] = useState(prenda.id_categoria ? prenda.id_categoria : -1)
-    const [selectC, setSelectC] = useState(prenda.id_categoria ? prenda.id_categoria : -1)
+    const [categoriaSelect, setCategoria] = useState(producto.id_categoria ? producto.id_categoria : -1)
+    const [selectC, setSelectC] = useState(producto.id_categoria ? producto.id_categoria : -1)
 
     const [isConfirmActive, setisConfirmActive] = useState(false)
     const [loader, setLoader] = useState(false)
@@ -48,25 +53,27 @@ function PrendaTalle() {
         setisConfirmActive(true)
     }
 
+    console.log(tallesProducto)
+
     const handleOnResponse = async () => {
         setLoader(true)
         setCategoria(selectC)
 
         await Promise.all([
-            deleteFromTable(`/delete/talles/prenda/${prenda.id}`),
-            putToTable({ id_categoria: parseInt(selectC) == -1 ? undefined : selectC }, `/put/prenda/${prenda.id}/categoria`)
+            deleteFromTable(`/delete/talles/producto/${producto.id}`),
+            putToTable({ id_categoria: parseInt(selectC) == -1 ? undefined : selectC }, `/put/producto/${producto.id}/categoria`)
         ])
 
-        navigator(`../Prendas/${prenda.id}/edit/talles`)
+        navigator(`../${type}/${producto.id}/edit/talles`)
     }
 
     useEffect(() => {
         setLoader(false)
-    }, [prenda.id_categoria, tallesProducto])
+    }, [producto.id_categoria, tallesProducto])
 
     return (
         <div className="categorias">
-            <TitleWithBackButton direction={`../Prendas/${prenda.id}/edit`} title="Editar Talles" />
+            <TitleWithBackButton direction={`../${type}/${producto.id}/edit`} title="Editar Talles" />
             <p style={{ margin: '0.5rem', marginLeft: '1rem', fontSize: '1.6rem' }}>Categoria</p>
             <div style={{ display: "flex" }}>
                 <select
@@ -88,22 +95,29 @@ function PrendaTalle() {
                                 <p>Talle</p>
                             </th>
                             <th>
+                                <p>Stock</p>
+                            </th>
+                            <th>
                                 <p>Acciones</p>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <TableLines lines={2} />
+                        <TableLines lines={3} />
                         <AddTalle
-                            idPrenda={prenda.id}
+                            idProducto={producto.id}
+                            type={type}
                             talles={categoriaSelect == -1 ? [] : filterbyCategoryId(talles, categoriaSelect).filter(
                                 talleS => !tallesProducto.some((talleP: any) => talleP.id === talleS.id))}
                             setLoader={setLoader} />
-                        <TableLines lines={2} />
-                        <ShowTalles
-                            idPrenda={prenda.id}
-                            talles={tallesProducto}
-                            setLoader={setLoader} />
+                        <TableLines lines={3} />
+                        {tallesProducto.map((talle: any) =>
+                            <ShowTalles
+                                key={talle.id}
+                                type={type}
+                                idProducto={producto.id}
+                                talle={talle}
+                                setLoader={setLoader} />)}
                     </tbody>
                 </table>
             </div>
@@ -119,36 +133,54 @@ function PrendaTalle() {
     )
 }
 
-export default PrendaTalle
+export default ProductoTalle
 
 type AddTalleType = {
     talles: Array<any>,
-    idPrenda: number,
+    type: string,
+    idProducto: number,
     setLoader: (value: boolean) => void
 }
 
 function AddTalle(prop: AddTalleType) {
-    const { idPrenda, talles, setLoader } = prop
+    const { idProducto, talles, setLoader, type } = prop
 
     const [talleSelect, setTalle] = useState<number>(talles.length != 0 ? talles[0].id : -1)
+    const [stock, setStock] = useState<string>('')
     const navigator = useNavigate()
 
     const handleOnSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+
+        if (stock == '')
+            return
+
         setLoader(true)
 
-        const data = {
-            id_talle: talleSelect,
-            id_producto: idPrenda
-        }
+        const data = talles.length == 0 ? {
+            id_producto: idProducto,
+            stock: stock
+        } :
+            {
+                id_talle: talleSelect,
+                id_producto: idProducto,
+                stock: stock
+            }
 
-        await postToTable(data, '/post/talle/prenda')
-        return navigator(`../Prendas/${idPrenda}/edit/talles`)
+        await postToTable(data, '/post/talle/producto')
+        return navigator(`../${type}/${idProducto}/edit/talles`)
     }
 
     useEffect(() => {
         setTalle(talles.length != 0 ? talles[0].id : -1)
     }, [talles])
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const inputValue = e.target.value;
+
+        if (/^[0-9]*$/.test(inputValue))
+            setStock(inputValue);
+    }
 
     return (
         <tr className="selection">
@@ -156,11 +188,23 @@ function AddTalle(prop: AddTalleType) {
                 <center>
                     <select
                         value={talleSelect}
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTalle(parseInt(e.target.value))}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTalle(e.target.value as any)}
                         disabled={talles.length == 0}>
                         {talles.map((talle: any) =>
                             <option key={talle.id} value={talle.id}>{talle.talle}</option>)}
                     </select>
+                </center>
+            </td>
+            <td>
+                <center>
+                    <input
+                        className="number"
+                        min={0}
+                        onChange={handleChange}
+                        value={stock}
+                        type="number"
+                        placeholder="Stock..."
+                        required />
                 </center>
             </td>
             <td className="actions">
@@ -168,7 +212,6 @@ function AddTalle(prop: AddTalleType) {
                     onSubmit={handleOnSubmit}
                     method="POST">
                     <button
-                        disabled={talles.length == 0}
                         className="add blue"
                         type="submit">Agregar</button>
                 </form>
@@ -178,22 +221,59 @@ function AddTalle(prop: AddTalleType) {
 }
 
 type ShowTallesType = {
-    talles: Array<any>,
-    idPrenda: number,
+    talle: any,
+    idProducto: number,
+    type: string,
     setLoader: (value: boolean) => void
 }
 
 function ShowTalles(prop: ShowTallesType) {
-    const { talles, idPrenda, setLoader } = prop
+    const { talle, idProducto, setLoader, type } = prop
 
-    return talles.map((talle: any) =>
-        <tr key={talle.id} className="item">
+    const [stock, setStock] = useState<string>(talle.stock)
+    const navigator = useNavigate()
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const inputValue = e.target.value;
+
+        if (/^[0-9]*$/.test(inputValue))
+            setStock(inputValue);
+    }
+
+    const handleOnClick = async () => {
+        if (stock == '')
+            return
+
+        setLoader(true)
+
+        const data = {
+            stock: stock
+        } 
+
+        await putToTable(data, `/put/talle/stock/${talle.id}`)
+        return navigator(`../${type}/${idProducto}/edit/talles`)
+    }
+
+    return (
+        <tr className="item">
             <td>
                 <p>{talle.talle}</p>
             </td>
+            <td>
+                <center>
+                    <input
+                        className="number"
+                        min={0}
+                        onChange={handleChange}
+                        value={stock}
+                        type="number"
+                        placeholder="Stock..."
+                        required />
+                </center>
+            </td>
             <td className="actions">
                 <Form
-                    action={`../Prendas/${idPrenda}/edit/talles/${talle.id}/delete`}
+                    action={`../${type}/${idProducto}/edit/talles/${talle.id}/delete`}
                     method="POST"
                     onSubmit={(e) => {
                         if (!confirm(`Quiere eliminar el talle: ${talle.talle}?`))
@@ -201,10 +281,14 @@ function ShowTalles(prop: ShowTallesType) {
                         setLoader(true)
                     }}>
                     <button
-                        className="add"
+                        onClick={handleOnClick}
+                        className="blue"
+                        type="button">Editar</button>
+                    <button
                         onClick={() => { }}
                         type="submit">Eliminar</button>
                 </Form>
             </td>
-        </tr>)
+        </tr>
+    )
 }

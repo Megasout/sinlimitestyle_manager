@@ -4,18 +4,35 @@ import { postToTableWithFormData } from "../../../Models/post"
 import { useLoaderData, useNavigate } from "react-router-dom"
 import TitleWithBackButton from "../../../Components/TitleWithBackButton"
 import Loader from "../../../Components/Loader"
+import getFromTable from "../../../Models/get"
 
-function AccesoriosAdd() {
-    const { categorias } = useLoaderData() as any
+export async function loader({ params }: any) {
+    const type = params.TYPE
+
+    if (type != 'Prendas' && type != 'Accesorios')
+        throw new Response('', {
+            status: 404
+        })
+
+    const [categorias] = await Promise.all([
+        getFromTable(`/get/categorias/bytype/${type == 'Prendas' ? 'prenda' : 'accesorio'}`),
+    ])
+
+    return { categorias: categorias, type: type == 'Prendas' ? 'prenda' : 'accesorio' }
+}
+
+function ProductoAdd() {
+    const { categorias, type } = useLoaderData() as any
     const navigator = useNavigate()
     const [loader, setLoader] = useState(false)
 
+    const direction = type == 'prenda' ? 'Prendas' : 'Accesorios'
+
     const [files, setFiles] = useState<File[]>()
-    const [accesorio, setAccesorio] = useState<AccesorioType>({
+    const [producto, setProducto] = useState<ProductoType>({
         name: '',
         material: '',
         category: -1,
-        stock: 0,
         price: 0,
         off: 0
     })
@@ -32,29 +49,28 @@ function AccesoriosAdd() {
                 formData.append(`files`, file)
             })
 
-        formData.append('nombre', accesorio.name)
-        formData.append('material', accesorio.material)
-        formData.append('stock', accesorio.stock.toString())
-        formData.append('precio', accesorio.price.toString())
-        formData.append('descuento', accesorio.off.toString())
-        if (accesorio.category !== -1) {
-            formData.append('id_categoria', accesorio.category.toString())
+        formData.append('nombre', producto.name)
+        formData.append('material', producto.material)
+        formData.append('precio', producto.price.toString())
+        formData.append('descuento', producto.off.toString())
+        if (producto.category !== -1) {
+            formData.append('id_categoria', producto.category.toString())
         }
 
-        const result = await postToTableWithFormData(formData, '/post/accesorio')
+        const result = await postToTableWithFormData(formData, `/post/${type}`)
 
-        return navigator(`../Accesorios/${result.id}/edit`)
+        return navigator(`../${direction}/${result.id}/edit`)
     }
 
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target
-        setAccesorio(prev => ({ ...prev, [name]: value }))
+        setProducto(prev => ({ ...prev, [name]: value }))
     }
 
     return (
         <div className="prendas_add">
-            <TitleWithBackButton direction="../Accesorios" title="Agregar Accesorio"/>
+            <TitleWithBackButton direction={`../${direction}`} title={`Agregar ${type[0].toUpperCase() + type.slice(1)}`} />
             <div className="content">
                 <form
                     method="POST"
@@ -64,16 +80,16 @@ function AccesoriosAdd() {
                     <label>Nombre</label>
                     <input
                         name="name"
-                        value={accesorio?.name}
+                        value={producto?.name}
                         onChange={handleInputChange}
                         type="text"
-                        placeholder="Nombre del accesorio..."
+                        placeholder={`Nombre${type == 'prenda' ? ' de la prenda...' : ' del accesorio'}`}
                         required
                     />
                     <label>Categoria</label>
                     <select
                         name="category"
-                        value={accesorio.category}
+                        value={producto.category}
                         onChange={handleInputChange}>
                         <option value={-1}>---Sin Seleccionar---</option>
                         {categorias.map((categoria: any) =>
@@ -82,25 +98,16 @@ function AccesoriosAdd() {
                     <label>Material</label>
                     <input
                         name="material"
-                        value={accesorio.material}
+                        value={producto.material}
                         onChange={handleInputChange}
                         type="text"
                         placeholder="Materiales..."
-                        required />
-                    <label>Stock</label>
-                    <input
-                        name="stock"
-                        min={0}
-                        value={accesorio.stock}
-                        onChange={handleInputChange}
-                        type="number"
-                        placeholder="Cantidad en stock"
                         required />
                     <label>Precio</label>
                     <input
                         name="price"
                         min={0}
-                        value={accesorio.price}
+                        value={producto.price}
                         onChange={handleInputChange}
                         type="number"
                         placeholder="Precio completo"
@@ -110,7 +117,7 @@ function AccesoriosAdd() {
                         name="off"
                         min={0}
                         max={100}
-                        value={accesorio.off}
+                        value={producto.off}
                         onChange={handleInputChange}
                         type="number"
                         placeholder="Descuento %" />
@@ -118,18 +125,17 @@ function AccesoriosAdd() {
                 </form>
                 <DropZone setFiles={setFiles} files={files} />
             </div>
-            <Loader loader={loader}/>
+            <Loader loader={loader} />
         </div>
     )
 }
 
-export default AccesoriosAdd
+export default ProductoAdd
 
-type AccesorioType = {
+type ProductoType = {
     name: string,
     category: number,
     material: string,
-    stock: number,
     price: number,
     off: number
 }

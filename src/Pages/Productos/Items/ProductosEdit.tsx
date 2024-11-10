@@ -8,35 +8,41 @@ import Loader from "../../../Components/Loader"
 import deleteFromTable from "../../../Models/delete"
 import Confirm from "../../../Components/Confirm"
 
-//TODO: agregar boton de ocultar o mostrar
-
 export async function loader({ params }: any) {
     const id = params.ID
+    const t = params.TYPE
 
-    const [prenda, miniatura] = await Promise.all([
-        getFromTable(`/get/prenda/${id}`),
-        getFromTable(`/get/miniatura/prenda/${id}`)
+    if (t != 'Prendas' && t != 'Accesorios')
+        throw new Response('', {
+            status: 404
+        })
+
+    const [producto, miniatura] = await Promise.all([
+        getFromTable(`/get/producto/${id}`),
+        getFromTable(`/get/miniatura/producto/${id}`)
     ])
 
-    return { prenda: prenda[0], miniatura: miniatura[0] }
+    return { producto: producto[0], miniatura: miniatura[0], type: t == 'Prendas' ? 'prenda' : 'accesorio'}
 }
 
-function PrendasEdit() {
-    const { prenda, miniatura } = useLoaderData() as any
+function ProductosEdit() {
+    const { producto, miniatura, type } = useLoaderData() as any
     const navigator = useNavigate()
     const [loader, setLoader] = useState(false)
+
+    const direction = type == 'prenda' ? 'Prendas' : 'Accesorios'
 
     const [confirm, setConfirm] = useState(false)
 
     useEffect(() => {
         setLoader(false)
-    }, [prenda])
+    }, [producto])
 
-    const handleDeletePrenda = async () => {
+    const handleDeleteProducto = async () => {
         try {
             setLoader(true)
-            await deleteFromTable(`/delete/prenda/${prenda.id}`)
-            return navigator(`../Prendas`)
+            await deleteFromTable(`/delete/producto/${producto.id}`)
+            return navigator(`../${direction}`)
 
         } catch (err) {
             setLoader(false)
@@ -49,24 +55,26 @@ function PrendasEdit() {
             <TitleWithBackButton
                 deleteButton
                 onClickDeleteButton={() => setConfirm(true)}
-                direction="../Prendas"
-                title="Editar Prenda" />
+                direction={`../${direction}`}
+                title={`Editar ${type[0].toUpperCase() + type.slice(1)}`} />
             <ContentEdit
                 miniatura={miniatura}
-                prenda={prenda}
+                producto={producto}
+                type={type}
+                direction={direction}
                 setLoader={setLoader} />
             <Loader loader={loader} />
             <Confirm
                 isActive={confirm}
-                message="Desea eliminar esta prenda?"
-                onResponse={handleDeletePrenda} setIsActive={setConfirm} />
+                message={`Desea eliminar ${type == 'prenda' ? 'esta prenda?' : 'este accesorio?'}`}
+                onResponse={handleDeleteProducto} setIsActive={setConfirm} />
         </div>
     )
 }
 
-export default PrendasEdit
+export default ProductosEdit
 
-type PrendaType = {
+type ProductoType = {
     name: string,
     material: string,
     stock: number,
@@ -76,34 +84,36 @@ type PrendaType = {
 }
 
 type ContentEditType = {
-    prenda: any,
+    producto: any,
+    type: string,
+    direction: string,
     miniatura: any,
     setLoader: (value: boolean) => void
 }
 
 function ContentEdit(props: ContentEditType) {
-    const { prenda, miniatura, setLoader } = props
+    const { producto, miniatura, setLoader, type, direction } = props
     const navigator = useNavigate()
 
     const [file, setFile] = useState<File>()
     const [url, setUrl] = useState<string>(miniatura ? miniatura.url : '')
 
-    const [prendaData, setPrenda] = useState<PrendaType>({
-        name: prenda.nombre,
-        material: prenda.material,
-        off: prenda.descuento,
-        price: prenda.precio,
-        stock: prenda.stock,
-        isActive: prenda.activo
-    } as PrendaType)
+    const [productoData, setProducto] = useState<ProductoType>({
+        name: producto.nombre,
+        material: producto.material,
+        off: producto.descuento,
+        price: producto.precio,
+        stock: producto.stock,
+        isActive: producto.activo
+    } as ProductoType)
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target
 
         if (type === 'checkbox') {
-            setPrenda(prev => ({ ...prev, [name]: !prendaData.isActive}))
+            setProducto(prev => ({ ...prev, [name]: !productoData.isActive}))
         } else {
-            setPrenda(prev => ({ ...prev, [name]: value }))
+            setProducto(prev => ({ ...prev, [name]: value }))
         }
     }
 
@@ -116,14 +126,14 @@ function ContentEdit(props: ContentEditType) {
         if (url == '' && file)
             formData.append('file', file)
 
-        formData.append('nombre', prendaData.name)
-        formData.append('material', prendaData.material)
-        formData.append('precio', prendaData.price.toString())
-        formData.append('descuento', prendaData.off.toString())
-        formData.append('activo', prendaData.isActive.toString())
+        formData.append('nombre', productoData.name)
+        formData.append('material', productoData.material)
+        formData.append('precio', productoData.price.toString())
+        formData.append('descuento', productoData.off.toString())
+        formData.append('activo', productoData.isActive.toString())
 
-        await putToTableWithFormData(formData, `/put/prenda/${prenda.id}`)
-        return navigator(`../Prendas/${prenda.id}/edit`)
+        await putToTableWithFormData(formData, `/put/producto/${producto.id}`)
+        return navigator(`../${direction}/${producto.id}/edit`)
     }
 
     return (
@@ -138,16 +148,16 @@ function ContentEdit(props: ContentEditType) {
                 <label>Nombre</label>
                 <input
                     name="name"
-                    value={prendaData.name}
+                    value={productoData.name}
                     onChange={handleInputChange}
                     type="text"
-                    placeholder="Nombre de la prenda..."
+                    placeholder={`Nombre${type == 'prenda' ? ' de la prenda...' : ' del accesorio'}`}
                     required
                 />
                 <label>Material</label>
                 <input
                     name="material"
-                    value={prendaData.material}
+                    value={productoData.material}
                     onChange={handleInputChange}
                     type="text"
                     placeholder="Materiales..."
@@ -156,7 +166,7 @@ function ContentEdit(props: ContentEditType) {
                 <input
                     name="price"
                     min={0}
-                    value={prendaData.price}
+                    value={productoData.price}
                     onChange={handleInputChange}
                     type="number"
                     placeholder="Precio completo"
@@ -165,14 +175,14 @@ function ContentEdit(props: ContentEditType) {
                 <input
                     name="off"
                     min={0}
-                    value={prendaData.off}
+                    value={productoData.off}
                     onChange={handleInputChange}
                     type="number"
                     placeholder="Descuento %" />
                 <button
                     type="button"
                     onClick={() => navigator('./talles')}
-                    className="buttonB">Seleccionar Categoria y Talles</button>
+                    className="buttonB">Seleccionar Categoria, Talles y Stock</button>
                 <button
                     type="button"
                     onClick={() => navigator('./colores')}
@@ -186,7 +196,7 @@ function ContentEdit(props: ContentEditType) {
                         id="check"
                         type="checkbox"
                         name="isActive"
-                        checked={prendaData.isActive}
+                        checked={productoData.isActive}
                         onChange={handleInputChange}
                     ></input>
                     <label htmlFor="check">Mostrar Producto</label>

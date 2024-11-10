@@ -9,35 +9,42 @@ import deleteFromTable from "../../../Models/delete"
 
 export async function loader({ params }: any) {
     const id = params.ID
+    const type = params.TYPE
 
-    const [colores, coloresAccesorio] = await Promise.all([
+    if (type != 'Prendas' && type != 'Accesorios')
+        throw new Response('', {
+            status: 404
+        })
+
+    const [colores, coloresProducto] = await Promise.all([
         getFromTable(`/get/colores`),
-        getFromTable(`/get/colores/accesorio/${id}`)
+        getFromTable(`/get/colores/producto/${id}`)
     ])
 
-    return { accesorioId: id, colores: colores, coloresAccesorio: coloresAccesorio }
+    return { productoId: id, colores, coloresProducto, type }
 }
 
 export async function action({ params }: any) {
     const idC = params.COLORID
-    const idA = params.ID
+    const idP = params.ID
+    const type = params.TYPE
 
-    await deleteFromTable(`/delete/color/${idC}/accesorio/${idA}`)
+    await deleteFromTable(`/delete/color/${idC}/producto/${idP}`)
 
-    return redirect(`../Accesorios/${idA}/edit/colores`)
+    return redirect(`../${type}/${idP}/edit/colores`)
 }
 
-function AccesorioColores() {
-    const { accesorioId, colores, coloresAccesorio } = useLoaderData() as any
+function ProductoColores() {
+    const { productoId, colores, coloresProducto, type } = useLoaderData() as any
     const [loader, setLoader] = useState(false)
 
     useEffect(() => {
         setLoader(false)
-    }, [coloresAccesorio])
+    }, [coloresProducto])
 
     return (
         <div className="categorias">
-            <TitleWithBackButton direction={`../Accesorios/${accesorioId}/edit`} title="Editar Colores" />
+            <TitleWithBackButton direction={`../${type}/${productoId}/edit`} title="Editar Colores" />
             <div className="get">
                 <table>
                     <thead>
@@ -57,14 +64,16 @@ function AccesorioColores() {
                         <TableLines lines={3} />
                         <AddColor
                             colors={colores.filter((col: any) =>
-                                !coloresAccesorio.some((pre: any) => col.id === pre.id))}
-                            accesorioId={accesorioId}
+                                !coloresProducto.some((pre: any) => col.id === pre.id))}
+                                productoId={productoId}
                             setLoader={setLoader}
+                            type={type}
                             loader={loader} />
                         <TableLines lines={3} />
                         <ShowColors
-                            colors={coloresAccesorio}
-                            accesorioId={accesorioId}
+                            colors={coloresProducto}
+                            type={type}
+                            productoId={productoId}
                             setLoader={setLoader} />
                     </tbody>
                 </table>
@@ -75,17 +84,18 @@ function AccesorioColores() {
     )
 }
 
-export default AccesorioColores
+export default ProductoColores
 
 type AddColorType = {
     colors: Array<any>,
     loader: boolean,
+    type: string,
     setLoader: (value: boolean) => void,
-    accesorioId: number
+    productoId: number
 }
 
 function AddColor(prop: AddColorType) {
-    const { colors, setLoader, loader, accesorioId } = prop
+    const { colors, setLoader, loader, productoId, type } = prop
 
     const [colorSelect, setColor] = useState<number>(colors.length != 0 ? colors[0].id : -1)
     const navigator = useNavigate()
@@ -97,11 +107,11 @@ function AddColor(prop: AddColorType) {
 
         const data = {
             id_color: colorSelect,
-            id_accesorio: accesorioId
+            id_producto: productoId
         }
 
-        await postToTable(data, '/post/color/accesorio')
-        return navigator(`../Accesorios/${accesorioId}/edit/colores`)
+        await postToTable(data, '/post/color/producto')
+        return navigator(`../${type}/${productoId}/edit/colores`)
     }
 
     useEffect(() => {
@@ -148,12 +158,13 @@ function AddColor(prop: AddColorType) {
 
 type ShowColorsType = {
     colors: Array<any>,
-    accesorioId: number,
+    productoId: number,
+    type: string
     setLoader: (value: boolean) => void
 }
 
 function ShowColors(prop: ShowColorsType) {
-    const { colors, accesorioId, setLoader } = prop
+    const { colors, productoId, setLoader, type } = prop
 
     return colors.map((color: any) =>
         <tr key={color.id} className="item">
@@ -167,7 +178,7 @@ function ShowColors(prop: ShowColorsType) {
             </td>
             <td className="actions">
                 <Form
-                    action={`../Accesorios/${accesorioId}/edit/colores/${color.id}/delete`}
+                    action={`../${type}/${productoId}/edit/colores/${color.id}/delete`}
                     method="POST"
                     onSubmit={(e) => {
                         if (!confirm(`Quiere eliminar el Color: ${color.nombre}?`))

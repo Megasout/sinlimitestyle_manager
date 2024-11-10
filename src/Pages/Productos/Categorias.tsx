@@ -92,7 +92,7 @@ function AddCategoria(props: AddCategoriaType) {
 
     const navigator = useNavigate()
     const [nombre, setNombre] = useState('')
-    const [tipo, setTipo] = useState('Ropa')
+    const [tipo, setTipo] = useState('prenda')
 
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setNombre(e.target.value)
@@ -135,8 +135,8 @@ function AddCategoria(props: AddCategoriaType) {
             <td>
                 <center>
                     <select value={tipo} onChange={handleTipoChange}>
-                        <option value={"Ropa"}>Ropa</option>
-                        <option value={"Accesorio"}>Accesorio</option>
+                        <option value={"prenda"}>Prenda</option>
+                        <option value={"accesorio"}>Accesorio</option>
                     </select>
                 </center>
             </td>

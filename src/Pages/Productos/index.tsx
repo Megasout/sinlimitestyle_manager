@@ -1,5 +1,5 @@
 import { RouteObject } from "react-router-dom";
-import Productos from "./Productos";
+import ProductosText from "./ProductosText";
 import { loader as layoutLoader } from "../../Components/Layout";
 import LayoutProductos from "../../Components/LayoutProductos";
 import Colores, { loader as coloresLoader } from "./Colores";
@@ -10,100 +10,53 @@ import { action as deleteCategoria } from "../../Components/Productos/CategoriaE
 import TallesEdit, { loader as tallesByCategoriaLoader } from "./TallesEdit";
 import { action as deleteTalle } from "../../Components/Productos/TalleEditElement"
 
-import Prendas, { loader as prendasLoader } from "./Prendas/Prendas";
-import PrendasAdd from "./Prendas/PrendasAdd";
-import PrendasEdit, { loader as prendaEditLoader } from "./Prendas/PrendasEdit";
-import PrendaTalle, { loader as prendaTalleLoader, action as deletePrendaTalle } from "./Prendas/PrendaTalle";
-import PrendaImagenes, { loader as prendaImagenesLoader } from "./Prendas/PrendaImagenes";
-import PrendaColores, { loader as prendaColoresLoader, action as deletePrendaColor } from "./Prendas/PrendaColores";
-
-import Accesorios, { loader as accesoriosLoader } from "./Accesorios/Accesorios"
-import AccesoriosAdd from "./Accesorios/AccesoriosAdd";
-import AccesoriosEdit, { loader as accesorioEditLoader } from "./Accesorios/AccesoriosEdit";
-import AccesorioTalle, { loader as accesorioTalleLoader, action as deleteAccesorioTalle } from "./Accesorios/AccesorioTalles";
-import AccesorioColores, {loader as accesorioColoresLoader, action as deleteAccesorioColor} from "./Accesorios/AccesorioColores";
-import AccesorioImagenes, {loader as accesorioImagenesLoader} from "./Accesorios/AccesorioImagenes";
 import ErrorPage from "../ErrorPage";
+
+import ProductoAdd, {loader as productoAddLoader} from "./Items/ProductoAdd";
+import ProductosEdit, {loader as productoEditLoader} from "./Items/ProductosEdit";
+import Productos, {loader as productosLoader} from "./Items/Productos";
+import ProductoImagenes, {loader as productoImagenesLoader} from "./Items/ProductoImagenes";
+import ProductoColores, {loader as productoColoresLoader, action as deleteProductoColor} from "./Items/ProductoColores";
+import ProductoTalle, {loader as productoTalleLoader, action as deleteProductoTalle} from "./Items/ProductoTalle";
 
 const prendasRoute: RouteObject[] = [
     {
-        path: 'Prendas',
-        element: <Prendas />,
-        loader: prendasLoader
+        path: ':TYPE',
+        element: <Productos />,
+        loader: productosLoader
     },
     {
-        path: 'Prendas/add',
-        element: <PrendasAdd />,
-        loader: prendasLoader
+        path: ':TYPE/add',
+        element: <ProductoAdd />,
+        loader: productoAddLoader
     },
     {
-        path: 'Prendas/:ID/edit',
-        loader: prendaEditLoader,
-        element: <PrendasEdit />
+        path: ':TYPE/:ID/edit',
+        element: <ProductosEdit />,
+        loader: productoEditLoader,
     },
     {
-        path: 'Prendas/:ID/edit/talles',
-        element: <PrendaTalle />,
-        loader: prendaTalleLoader,
+        path: ':TYPE/:ID/edit/talles',
+        element: <ProductoTalle />,
+        loader: productoTalleLoader,
     },
     {
-        path: 'Prendas/:ID/edit/talles/:TALLEID/delete',
-        action: deletePrendaTalle
+        path: ':TYPE/:ID/edit/talles/:TALLEID/delete',
+        action: deleteProductoTalle
     },
     {
-        path: 'Prendas/:ID/edit/colores',
-        element: <PrendaColores />,
-        loader: prendaColoresLoader
+        path: ':TYPE/:ID/edit/colores',
+        element: <ProductoColores />,
+        loader: productoColoresLoader
     },
     {
-        path: 'Prendas/:ID/edit/colores/:COLORID/delete',
-        action: deletePrendaColor
+        path: ':TYPE/:ID/edit/colores/:COLORID/delete',
+        action: deleteProductoColor
     },
     {
-        path: 'Prendas/:ID/edit/imagenes',
-        element: <PrendaImagenes />,
-        loader: prendaImagenesLoader
-    }
-]
-
-const accesoriosRoute: RouteObject[] = [
-    {
-        path: 'Accesorios',
-        element: <Accesorios />,
-        loader: accesoriosLoader
-    },
-    {
-        path: 'Accesorios/add',
-        element: <AccesoriosAdd />,
-        loader: accesoriosLoader
-    },
-    {
-        path: 'Accesorios/:ID/edit',
-        loader: accesorioEditLoader,
-        element: <AccesoriosEdit />
-    },
-    {
-        path: 'Accesorios/:ID/edit/talles',
-        element: <AccesorioTalle />,
-        loader: accesorioTalleLoader,
-    },
-    {
-        path: 'Accesorios/:ID/edit/talles/:TALLEID/delete',
-        action: deleteAccesorioTalle
-    },
-    {
-        path: 'Accesorios/:ID/edit/colores',
-        element: <AccesorioColores />,
-        loader: accesorioColoresLoader
-    },
-    {
-        path: 'Accesorios/:ID/edit/colores/:COLORID/delete',
-        action: deleteAccesorioColor
-    }, 
-    {
-        path: 'Accesorios/:ID/edit/imagenes',
-        element: <AccesorioImagenes />,
-        loader: accesorioImagenesLoader
+        path: ':TYPE/:ID/edit/imagenes',
+        element: <ProductoImagenes />,
+        loader: productoImagenesLoader
     }
 ]
 
@@ -116,7 +69,7 @@ const productosRoute: RouteObject =
     children: [
         {
             index: true,
-            element: <Productos />
+            element: <ProductosText />
         },
         {
             path: 'Colores',
@@ -151,7 +104,6 @@ const productosRoute: RouteObject =
             action: deleteCategoria
         },
         ...prendasRoute,
-        ...accesoriosRoute
     ]
 }
 

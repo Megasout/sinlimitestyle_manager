@@ -1,4 +1,4 @@
-function Productos() {
+function ProductosText() {
     return (
         <div className="menu_title">
             <h1>Productos</h1>
@@ -6,4 +6,4 @@ function Productos() {
     )
 }
 
-export default Productos
+export default ProductosText

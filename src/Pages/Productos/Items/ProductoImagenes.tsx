@@ -8,18 +8,19 @@ import { putToTableWithFormData } from "../../../Models/put"
 
 export async function loader({ params }: any) {
     const id = params.ID
+    const type = params.TYPE
 
-    const imagenes = await getFromTable(`/get/imagenes/accesorio/${id}`)
+    const imagenes = await getFromTable(`/get/imagenes/producto/${id}`)
 
-    return { accesorioId: id, imagenes: imagenes }
+    return { productoId: id, imagenes: imagenes, type }
 }
 
-function AccesorioImagenes() {
-    const { accesorioId, imagenes } = useLoaderData() as any
+function ProductoImagenes() {
+    const { productoId, imagenes, type } = useLoaderData() as any
     const navigator = useNavigate()
     const [loader, setLoader] = useState(false)
     const [files, setFiles] = useState<File[]>()
-    const [urls, setUrls] = useState<ImageType[]>([])
+    const [urls, setUrls] = useState<ImageType[]>([]) 
 
     useEffect(() => {
         let images: ImageType[] = []
@@ -46,9 +47,9 @@ function AccesorioImagenes() {
 
         formData.append('delete_urls', JSON.stringify(deleteImages))
 
-        await putToTableWithFormData(formData, `/put/imagenes/accesorio/${accesorioId}`)
+        await putToTableWithFormData(formData, `/put/imagenes/producto/${productoId}`)
 
-        return navigator(`../Accesorios/${accesorioId}/edit/imagenes`)
+        return navigator(`../${type}/${productoId}/edit/imagenes`)
     }
 
     useEffect(() => {
@@ -57,7 +58,7 @@ function AccesorioImagenes() {
 
     return (
         <div className="prenda_imagenes">
-            <TitleWithBackButton direction={`../Accesorios/${accesorioId}/edit`} title="Editar Imagenes" />
+            <TitleWithBackButton direction={`../${type}/${productoId}/edit`} title="Editar Imagenes" />
             <DropZone className="drop" files={files} setFiles={setFiles} urls={urls} setUrls={setUrls} />
             <form
                 method="POST"
@@ -70,7 +71,7 @@ function AccesorioImagenes() {
     )
 }
 
-export default AccesorioImagenes
+export default ProductoImagenes
 
 type ImageType = {
     id: number,
