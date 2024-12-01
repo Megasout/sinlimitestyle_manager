@@ -2,8 +2,6 @@ import { RouteObject } from "react-router-dom";
 import ProductosText from "./ProductosText";
 import { loader as layoutLoader } from "../../Components/Layout";
 import LayoutProductos from "../../Components/LayoutProductos";
-import Colores, { loader as coloresLoader } from "./Colores";
-import { action as deleteColor } from "../../Components/Productos/ColorElement";
 import Talles, { loader as tallesLoader } from "./Talles";
 import Categorias, { loader as categoriasLoader } from "./Categorias";
 import { action as deleteCategoria } from "../../Components/Productos/CategoriaElement"
@@ -16,7 +14,6 @@ import ProductoAdd, {loader as productoAddLoader} from "./Items/ProductoAdd";
 import ProductosEdit, {loader as productoEditLoader} from "./Items/ProductosEdit";
 import Productos, {loader as productosLoader} from "./Items/Productos";
 import ProductoImagenes, {loader as productoImagenesLoader} from "./Items/ProductoImagenes";
-import ProductoColores, {loader as productoColoresLoader, action as deleteProductoColor} from "./Items/ProductoColores";
 import ProductoTalle, {loader as productoTalleLoader, action as deleteProductoTalle} from "./Items/ProductoTalle";
 
 const prendasRoute: RouteObject[] = [
@@ -45,15 +42,6 @@ const prendasRoute: RouteObject[] = [
         action: deleteProductoTalle
     },
     {
-        path: ':TYPE/:ID/edit/colores',
-        element: <ProductoColores />,
-        loader: productoColoresLoader
-    },
-    {
-        path: ':TYPE/:ID/edit/colores/:COLORID/delete',
-        action: deleteProductoColor
-    },
-    {
         path: ':TYPE/:ID/edit/imagenes',
         element: <ProductoImagenes />,
         loader: productoImagenesLoader
@@ -70,15 +58,6 @@ const productosRoute: RouteObject =
         {
             index: true,
             element: <ProductosText />
-        },
-        {
-            path: 'Colores',
-            element: <Colores />,
-            loader: coloresLoader
-        },
-        {
-            path: 'Colores/:ID/delete',
-            action: deleteColor
         },
         {
             path: 'Talles',

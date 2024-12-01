@@ -17,7 +17,6 @@ function LayoutProductos() {
                         <SideMenu_Button link="Prendas" text="Prendas" icon="fa-solid fa-p" />
                         <SideMenu_Button link="Categorias" text="Categorias" icon="fa-solid fa-c" />
                         <SideMenu_Button link="Talles" text="Talles" icon="fa-solid fa-t" />
-                        <SideMenu_Button link="Colores" text="Colores" icon="fa-solid fa-droplet" />
                     </nav>
                 </div>
             </div>
