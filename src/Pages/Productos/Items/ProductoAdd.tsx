@@ -31,6 +31,7 @@ function ProductoAdd() {
     const [files, setFiles] = useState<File[]>()
     const [producto, setProducto] = useState<ProductoType>({
         name: '',
+        description: '',
         material: '',
         category: -1,
         price: 0,
@@ -50,6 +51,7 @@ function ProductoAdd() {
             })
 
         formData.append('nombre', producto.name)
+        formData.append('descripcion', producto.description)
         formData.append('material', producto.material)
         formData.append('precio', producto.price.toString())
         formData.append('descuento', producto.off.toString())
@@ -63,7 +65,7 @@ function ProductoAdd() {
     }
 
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target
         setProducto(prev => ({ ...prev, [name]: value }))
     }
@@ -80,12 +82,18 @@ function ProductoAdd() {
                     <label>Nombre</label>
                     <input
                         name="name"
-                        value={producto?.name}
+                        value={producto.name}
                         onChange={handleInputChange}
                         type="text"
                         placeholder={`Nombre${type == 'prenda' ? ' de la prenda...' : ' del accesorio'}`}
                         required
                     />
+                    <label>Descripción</label>
+                    <textarea
+                        name="description"
+                        value={producto.description}
+                        placeholder={`Descripción${type == 'prenda' ? ' de la prenda...' : ' del accesorio'}`}
+                        onChange={handleInputChange}></textarea>
                     <label>Categoria</label>
                     <select
                         name="category"
@@ -134,6 +142,7 @@ export default ProductoAdd
 
 type ProductoType = {
     name: string,
+    description: string,
     category: number,
     material: string,
     price: number,

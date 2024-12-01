@@ -22,7 +22,7 @@ export async function loader({ params }: any) {
         getFromTable(`/get/miniatura/producto/${id}`)
     ])
 
-    return { producto: producto[0], miniatura: miniatura[0], type: t == 'Prendas' ? 'prenda' : 'accesorio'}
+    return { producto: producto[0], miniatura: miniatura[0], type: t == 'Prendas' ? 'prenda' : 'accesorio' }
 }
 
 function ProductosEdit() {
@@ -76,6 +76,7 @@ export default ProductosEdit
 
 type ProductoType = {
     name: string,
+    description: string,
     material: string,
     stock: number,
     price: number,
@@ -104,14 +105,15 @@ function ContentEdit(props: ContentEditType) {
         off: producto.descuento,
         price: producto.precio,
         stock: producto.stock,
-        isActive: producto.activo
+        description: producto.descripcion,
+        isActive: producto.activo == 1
     } as ProductoType)
 
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target
 
         if (type === 'checkbox') {
-            setProducto(prev => ({ ...prev, [name]: !productoData.isActive}))
+            setProducto(prev => ({ ...prev, [name]: !productoData.isActive }))
         } else {
             setProducto(prev => ({ ...prev, [name]: value }))
         }
@@ -127,10 +129,13 @@ function ContentEdit(props: ContentEditType) {
             formData.append('file', file)
 
         formData.append('nombre', productoData.name)
+        formData.append('descripcion', productoData.description)
         formData.append('material', productoData.material)
         formData.append('precio', productoData.price.toString())
         formData.append('descuento', productoData.off.toString())
         formData.append('activo', productoData.isActive.toString())
+
+        console.log(productoData.isActive.toString())
 
         await putToTableWithFormData(formData, `/put/producto/${producto.id}`)
         return navigator(`../${direction}/${producto.id}/edit`)
@@ -154,6 +159,12 @@ function ContentEdit(props: ContentEditType) {
                     placeholder={`Nombre${type == 'prenda' ? ' de la prenda...' : ' del accesorio'}`}
                     required
                 />
+                <label>Descripción</label>
+                <textarea
+                    name="description"
+                    value={productoData.description}
+                    placeholder={`Descripción${type == 'prenda' ? ' de la prenda...' : ' del accesorio'}`}
+                    onChange={handleInputChange}></textarea>
                 <label>Material</label>
                 <input
                     name="material"
@@ -182,11 +193,7 @@ function ContentEdit(props: ContentEditType) {
                 <button
                     type="button"
                     onClick={() => navigator('./talles')}
-                    className="buttonB">Seleccionar Categoria, Talles y Stock</button>
-                <button
-                    type="button"
-                    onClick={() => navigator('./colores')}
-                    className="buttonC">Seleccionar Colores</button>
+                    className="buttonC">Seleccionar Categoria, Talles y Stock</button>
                 <button
                     type="button"
                     onClick={() => navigator('./imagenes')}
