@@ -6,6 +6,7 @@
     justify-content: center;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 .login .block {
@@ -104,6 +105,8 @@
     width: 100%;
     background-color: #bf2525;
     animation: entry 0.8s ease;
+    top: 0;
+    height: 100px;
 
     h2{
         text-align: center;

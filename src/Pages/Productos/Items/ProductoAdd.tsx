@@ -106,7 +106,7 @@ function ProductoAdd() {
                     <label>Precio</label>
                     <input
                         name="price"
-                        min={0}
+                        min={1}
                         value={producto.price}
                         onChange={handleInputChange}
                         type="number"
